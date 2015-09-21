@@ -27,4 +27,3 @@ Or you can pass which theme to copy to ```dist/``` directory like this
 ```
 grunt --theme=yeti
 ```
-When you're done with UI, browse to your [http://localhost/](http://localhost/) and the application should be ready.
