@@ -14,7 +14,7 @@ func TestPermissionNames(t *testing.T) {
 		t.Log("Retrieve the original list")
 		names, err := app.Db.PermissionDb.Names(tx)
 		assert.Nil(t, err)
-		t.Log(names)
+
 		assert.Equal(t, true, len(names) > 0)
 		for i := range names {
 			name := &names[i]
