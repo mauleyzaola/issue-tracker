@@ -101,6 +101,7 @@ angular.module("TrackerApp.User.controllers", [])
         $scope.saveItem = function(){
             var isNewItem = !$scope.item.id;
             UserService.save($scope.item).then(function(data){
+                $scope.$emit('user:update',data);
                 if(!isNewItem) { $scope.exit(); }
                 else {
                     BrowserService.user.edit(data.id);

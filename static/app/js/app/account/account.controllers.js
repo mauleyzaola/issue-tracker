@@ -57,8 +57,7 @@ angular.module("TrackerApp.Account.controllers", [])
             });
 
     })
-    .controller("MyProfile.Controller", function($scope, $rootScope, $location, $window, AccountService, BusinessUnitService,
-                                                 SessionManagement, utils, IssueService, BrowserUrlService){
+    .controller("MyProfile.Controller", function($scope, $rootScope, $location, $window, AccountService, SessionManagement, utils, IssueService, BrowserUrlService){
 
         $scope.selectedTab = $location.$$search.tab || 1;
         $scope.sesiones = [];
@@ -122,6 +121,7 @@ angular.module("TrackerApp.Account.controllers", [])
                 .then(function(data){
                     SessionManagement.currentSession.user = data;
                     $rootScope.currentSession.user = data;
+                    $scope.$emit('user:update',data);
 
                     if($location.$$search.returnurl){
                         var params = $location.$$search.returnurl.split("?");

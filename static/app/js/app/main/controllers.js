@@ -82,6 +82,14 @@ angular.module('TrackerApp.controllers', [])
             $location.$$search = {};
         });
 
+        $scope.$on('user:update',function(data,args){
+            if(!$scope.isLoggedIn()){ return; }
+            if($scope.currentSession.user.id === args.id){
+                $scope.currentSession.user = args;
+                SessionManagement.currentSession($scope.currentSession);
+            }
+        });
+
         $scope.menuItems = menus();
     })
     .controller("Index.Controller", function($scope, $timeout, DashboardService, NotificationTypes,
