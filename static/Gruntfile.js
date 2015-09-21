@@ -68,6 +68,13 @@ module.exports = function(grunt) {
                 dest:'dist/stylesheets/'
             },
 
+            cssBootstrapTheme:{
+                expand:true,
+                cwd:'app/js/lib/bootswatch/' + (grunt.option('theme') || 'sandstone') + '/',
+                src:'bootstrap.min.css',
+                dest:'dist/stylesheets/'
+            },
+
             cssFontAwesome:{
                 expand:true,
                 cwd:'app/js/lib/components-font-awesome/',
