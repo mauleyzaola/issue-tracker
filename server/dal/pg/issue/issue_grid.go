@@ -111,7 +111,6 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 		}
 	}
 
-	//filtrar si esta o no vencido
 	if filter.Due.Valid {
 		if filter.Due.Bool {
 			query += " and duedate < now() "
@@ -128,6 +127,7 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 	}
 
 	grid.MainQuery = query
+
 	var rows []database.IssueGrid
 	fields := strings.Split("id,pkey,name,datecreated,lastmodified,duedate,resolveddate,reporter,priority,status,project,assignee,parent", ",")
 	return grid.ExecuteSqlParameters(t.Base.GetTransaction(tx), &rows, fields, pars)

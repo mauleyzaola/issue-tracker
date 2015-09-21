@@ -157,6 +157,7 @@ func (t *Api) grid(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = t.base.Database.IssueDb.Grid(tx, grid, filter)
+	t.base.Response(tx, err, w, grid)
 }
 
 func (t *Api) children(c web.C, w http.ResponseWriter, r *http.Request) {

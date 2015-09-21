@@ -92,17 +92,15 @@ angular.module("TrackerApp.Issue.services", [])
                 var pars = {
                     customCss: DefaultStyles.css.defaultTableHoverCss,
                     columns: [
-                        { name: "Clave", field:"pkey" },
-                        { name: "Proyecto", field:"project" },
-                        { name: "Pertenece a", field:"parent" },
-                        { name: "Nombre", field:"name" },
-                        { name: "Asignado a", field:"assignee" },
-                        { name: "Responsable", field:"reporter" },                        
-                        { name: "Prioridad", field:"priority" },
-                        { name: "Estado", field:"status" },
-                        { name: "Vencimiento", field:"dueDate", filter:"timeAgo" },
-                        { name: "Creado", field:"dateCreated", filter:"timeAgo" },
-                        { name: "Ultimo Cambio", field:"lastModified", filter:"timeAgo" }
+                        { name: "Key", field:"pkey" },
+                        { name: "Project", field:"project" },
+                        { name: "Parent", field:"parent" },
+                        { name: "Name", field:"name" },
+                        { name: "Assignee", field:"assignee" },
+                        { name: "Reporter", field:"reporter" },
+                        { name: "Priority", field:"priority" },
+                        { name: "Status", field:"status" },
+                        { name: "Due", field:"dueDate", filter:"timeAgo" }
                     ],
                     rowClick: function(row){
                         BrowserService.issue.edit(row.pkey);
@@ -196,13 +194,6 @@ angular.module("TrackerApp.Issue.services", [])
 
             mySubscriptionsGrid:function(data){
                 return $http.get(RunApiService.generateUrl(PathService.issue.mySubscriptions,data))
-                    .then(function(response){
-                        return response.data;
-                    });
-            },
-
-            logs:function(data){
-                return $http.get(PathService.issue.logs(data))
                     .then(function(response){
                         return response.data;
                     });

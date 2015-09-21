@@ -74,7 +74,7 @@ func (t *PermissionDb) AvailablesUser(tx interface{}, user *domain.User, issue *
 
 	if len(idProject) != 0 && len(idPermissionScheme) != 0 {
 		query = `
-		/* hereda la pertenencia por los usuarios de roles en un proyecto */
+		/* inherit ownership from project roles and users */
 		select	n.* 
 		from		permission_name n 
 		join		permission_scheme_item i on i.idpermissionname = n.id 
@@ -85,7 +85,7 @@ func (t *PermissionDb) AvailablesUser(tx interface{}, user *domain.User, issue *
 		and		pr.idproject = $3
 		union 
 		
-		/* hereda la pertenencia por los grupos de roles en un proyecto */
+		/* inherit ownership from project roles and groups */
 		select	n.* 
 		from		permission_name n 
 		join		permission_scheme_item i on i.idpermissionname = n.id 
@@ -97,7 +97,7 @@ func (t *PermissionDb) AvailablesUser(tx interface{}, user *domain.User, issue *
 		and	pr.idproject = $3
 		union
 		
-		/* hereda la pertenencia por los usuarios de un permission scheme */
+		/* inherit ownership from permission scheme and users */
 		select	n.* 
 		from		permission_name n 
 		join		permission_scheme_item i on i.idpermissionname = n.id 
@@ -107,12 +107,12 @@ func (t *PermissionDb) AvailablesUser(tx interface{}, user *domain.User, issue *
 		and		p.id = $3
 		union 
 		
-		/* hereda la pertenencia por los grupos de un permission scheme */
+		/* inherit ownership from permission scheme and group */
 		select	n.* 
 		from		permission_name n 
 		join		permission_scheme_item i on i.idpermissionname = n.id 
 		join		project p on p.idpermissionscheme = i.idpermissionscheme
-		join		group_user gu on gu.idgroup = i.idgroup
+		join		user_group gu on gu.idgroup = i.idgroup
 		where	gu.iduser = $1
 		and		i.idpermissionscheme = $2
 		and		p.id = $3
@@ -123,7 +123,7 @@ func (t *PermissionDb) AvailablesUser(tx interface{}, user *domain.User, issue *
 		select	n.* 
 		from		permission_name n 
 		join		permission_scheme_item i on i.idpermissionname = n.id 
-		join		user_grouop gu on gu.idgroup = i.idgroup 
+		join		user_group gu on gu.idgroup = i.idgroup 
 		where	gu.iduser = $1
 		and		i.idpermissionscheme = $2
 		union
@@ -135,14 +135,18 @@ func (t *PermissionDb) AvailablesUser(tx interface{}, user *domain.User, issue *
 		`
 		_, err = t.Base.Executor(tx).Select(&items, query, currUser.Id, idPermissionScheme)
 	} else {
-		//si no se pasa un proyecto, ni esta cargando un scheme especifico, devolver todos los permisos
-		//no aplica la seguridad fuera de los proyectos
+		//if there is no project parameter and this is not a specific permission scheme, return all permissions
+		//security only should apply with issues related with projects
 		items, err = t.Names(tx)
+	}
+
+	if err != nil {
+		return nil, err
 	}
 
 	for i := range items {
 		p := &items[i]
 		p.Initialize()
 	}
-	return items, err
+	return items, nil
 }

@@ -58,15 +58,15 @@ angular.module("TrackerApp.Project.services", [])
                 var pars = {
                     customCss: DefaultStyles.css.defaultTableHoverCss,
                     columns: [
-                        { name: "Nombre", field:"name" },
-                        { name: "Clave", field:"pkey" },
-                        { name: "Lider", field:"projectLead" },
-                        { name: "Inicio", field:"begins", filter:"dateFormat" },
-                        { name: "Fin", field:"ends", filter:"dateFormat" },
-                        { name: "Creado", field:"dateCreated", filter:"timeAgo" },
-                        { name: "Tareas", field:"issueCount" },
-                        { name: "% Completado", field:"percentageCompleted", filter:"percent" },
-                        { name: "Esquema de Permisos", field:"permissionScheme" }
+                        { name: "Name", field:"name" },
+                        { name: "Key", field:"pkey" },
+                        { name: "Lead", field:"projectLead" },
+                        { name: "Starts", field:"begins", filter:"dateFormat" },
+                        { name: "Ends", field:"ends", filter:"dateFormat" },
+                        { name: "Created", field:"dateCreated", filter:"timeAgo" },
+                        { name: "Issues", field:"issueCount" },
+                        { name: "% Completed", field:"percentageCompleted", filter:"percent" },
+                        { name: "Scheme", field:"permissionScheme" }
                     ],
                     rowClick: function(row){
                         $location.search("");

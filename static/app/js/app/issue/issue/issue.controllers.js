@@ -40,7 +40,6 @@ angular.module("TrackerApp.Issue.controllers", [])
                                             ProjectService, PermissionSchemeService){
 
         $scope.item = { id: $routeParams.id};
-        $scope.logs=[];
         $scope.attachments = [];
         $scope.subtasks = [];
         $scope.isEditable = true;
@@ -66,16 +65,6 @@ angular.module("TrackerApp.Issue.controllers", [])
             $scope.isEditable = value;
             $scope.permissions = permissions;
         }
-
-
-        var loadLogs = function(){
-            if($scope.item.id){
-                IssueService.logs($scope.item)
-                    .then(function(data){
-                        $scope.logs=data;
-                    })
-            }
-        };
 
 
         var loadSubscriptions = function(){
@@ -107,8 +96,6 @@ angular.module("TrackerApp.Issue.controllers", [])
 
                     if($routeParams.pkey){
                         $scope.item.parent = data.parent;
-
-                        loadLogs();
 
                         IssueService.getChildren($scope.item.id)
                             .then(function(data){
@@ -267,7 +254,6 @@ angular.module("TrackerApp.Issue.controllers", [])
                     $scope.comments[index]=data;
                 }
                 dialogs.commentDialog.modal("hide");
-                loadLogs();
             });
         }
 
@@ -279,7 +265,6 @@ angular.module("TrackerApp.Issue.controllers", [])
                 .then(function(){
                     dialogs.commentDialog.modal("hide");
                     $scope.comments.splice(index,1);
-                    loadLogs();
                 })
         }
 
@@ -298,7 +283,6 @@ angular.module("TrackerApp.Issue.controllers", [])
                 fileItem:data
             }).then(function(data){
                 $scope.attachments.push(data);
-                loadLogs();
             });
         }
 
@@ -308,7 +292,6 @@ angular.module("TrackerApp.Issue.controllers", [])
             IssueService.attachmentRemove(a)
                 .then(function(data){
                     $scope.attachments.splice(index,1);
-                    loadLogs();
                 });
         }
 
@@ -340,7 +323,6 @@ angular.module("TrackerApp.Issue.controllers", [])
             IssueService.assignToMe({id:$scope.item.id})
                 .then(function(data){
                     $scope.item.assignee = data.assignee;
-                    loadLogs();
                 });
         }
 
@@ -348,7 +330,6 @@ angular.module("TrackerApp.Issue.controllers", [])
             IssueService.reporterIsMe({id:$scope.item.id})
                 .then(function(data){
                     $scope.item.reporter = data.reporter;
-                    loadLogs();
                 });
         }
 

@@ -5,7 +5,7 @@
 angular.module('TrackerApp.filters', [])
     .filter("boolToText", function(){
         return function(value){
-            return value ? "SI" : "NO";
+            return value ? "YES" : "NO";
         }
     })
     .filter("timeAgo", function(){

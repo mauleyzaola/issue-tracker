@@ -1,14 +1,14 @@
 <div>
     <form ng-submit="saveItem(item)" class="form-horizontal">
         <div class="form-group">
-            <label class="col-sm-2 control-label">Nombre</label>
+            <label class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
                 <input type="text" ng-model="item.name" class="form-control"/>
             </div>
         </div>
 
         <div class="pull-right">
-            <button class="btn btn-sm btn-info" ng-show="item.id" type="button" ng-click="testWorkflow()" >Probar Workflow</button>
+            <button class="btn btn-sm btn-info" ng-show="item.id" type="button" ng-click="testWorkflow()" >Test Workflow</button>
         </div>
         <div class="pull-left">
             <crud-Buttons></crud-Buttons>
@@ -35,11 +35,11 @@
     <table class="table table-bordered table-condensed table-striped">
         <thead>
         <tr>
-            <th>Paso</th>
-            <th>Estado Anterior</th>
-            <th>Estado Siguiente</th>
-            <th>Resuelve Tarea</th>
-            <th>Cancela Tarea</th>
+            <th>Step</th>
+            <th>Prev Step</th>
+            <th>Next Step</th>
+            <th>Resolves Issue</th>
+            <th>Cancels Issue</th>
         </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@
     </table>
     <button type="button" class="btn btn-sm btn-info" ng-click="addStep()">
         <i class="fa fa-plus"></i>
-        <span> Agregar Paso</span>
+        <span> Add Step</span>
     </button>
 
     <hr/>
@@ -62,8 +62,8 @@
     <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
-                <th>Estado</th>
-                <th>Descripcion</th>
+                <th>Status</th>
+                <th>Description</th>
             </tr>
         </thead>
         <tbody>
@@ -75,7 +75,7 @@
     </table>
     <button type="button" class="btn btn-sm btn-info" ng-click="addStatus()">
         <i class="fa fa-plus"></i>
-        <span> Agregar Estado</span>
+        <span> Add Status</span>
     </button>
 </div>
 
@@ -84,26 +84,26 @@
         <div class="modal-content">
             <form ng-submit="saveStatus(selectedStatus)" class="form-horizontal">
                 <div class="modal-header">
-                    <h4>Editar Status - {{selectedStatus.name}}</h4>
+                    <h4>Edit Status - {{selectedStatus.name}}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-lg-2">Nombre</label>
+                        <label class="col-lg-2">Name</label>
                         <div class="col-lg-6">
                             <input type="text" ng-model="selectedStatus.name" class="form-control"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2">Descripcion</label>
+                        <label class="col-lg-2">Description</label>
                         <div class="col-lg-6">
                             <input type="text" ng-model="selectedStatus.description" class="form-control"/>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-xs btn-success"><span> Guardar</span></button>
-                    <button type="button" ng-click="removeStatus(selectedStatus)" ng-show="selectedStatus.id" class="btn btn-xs btn-danger"><span> Eliminar</span></button>
-                    <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Cerrar</span></button>
+                    <button type="submit" class="btn btn-sm btn-success"><span> Save</span></button>
+                    <button type="button" ng-click="removeStatus(selectedStatus)" ng-show="selectedStatus.id" class="btn btn-sm btn-danger"><span> Remove</span></button>
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-primary"><span> Close</span></button>
                 </div>
             </form>
         </div>
@@ -116,25 +116,25 @@
         <div class="modal-content">
             <form ng-submit="saveStep(selectedStep)" class="form-horizontal">
                 <div class="modal-header">
-                    <h4>Editar Paso - {{selectedStep.name}}</h4>
+                    <h4>Edit Step - {{selectedStep.name}}</h4>
                 </div>
                 <div class="modal-body">
                     <tabset>
-                        <tab heading="Paso">
+                        <tab heading="Step">
                             <div class="form-group">
-                                <label class="col-lg-2">Nombre</label>
+                                <label class="col-lg-2">Name</label>
                                 <div class="col-lg-6">
                                     <input type="text" ng-model="selectedStep.name" class="form-control"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-2">Estado Anterior</label>
+                                <label class="col-lg-2">Prev Step</label>
                                 <div class="col-lg-8">
                                     <select ng-model="selectedStep.prevStatus.id" ng-options="i.id as i.name for i in statuses" class="form-control"></select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-2">Estado Siguiente</label>
+                                <label class="col-lg-2">Next Stp</label>
                                 <div class="col-lg-8">
                                     <select ng-model="selectedStep.nextStatus.id" ng-options="i.id as i.name for i in statuses" class="form-control"></select>
                                 </div>
@@ -142,22 +142,22 @@
                             <div class="form-group">
                                 <label class="control-label">
                                     <input type="checkbox" ng-model="selectedStep.resolves" />
-                                    Resuelve Tarea
+                                    Resolves Issue
                                 </label>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">
                                     <input type="checkbox" ng-model="selectedStep.cancels" />
-                                    Cancela Tarea
+                                    Cancels Issue
                                 </label>
                             </div>
                         </tab>
-                        <tab heading="Grupos">
-                            <h5>Seleccionar los grupos que pueden ejecutar este paso</h5>
+                        <tab heading="Groups">
+                            <h5>Select the groups that can execute this step</h5>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="list-group scroll-when-needed">
-                                        <a href="#" class="list-group-item active">Grupos Disponibles</a>
+                                        <a href="#" class="list-group-item active">Availables</a>
                                         <a ng-repeat="u in meta.group.unselected" ng-click="addMember(u)" class="list-group-item animation">
                                             <span>{{u.name}}</span>
                                         </a>
@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="list-group scroll-when-needed">
-                                        <a href="#" class="list-group-item active">Grupos Asignados</a>
+                                        <a href="#" class="list-group-item active">Selected</a>
                                         <a ng-repeat="u in meta.group.selected" ng-click="removeMember(u)" class="list-group-item animation">
                                             <span>{{u.name}}</span>
                                         </a>
@@ -173,12 +173,12 @@
                                 </div>
                             </div>
                         </tab>
-                        <tab heading="Usuarios">
-                            <h5>Seleccionar los usuarios que pueden ejecutar este paso</h5>
+                        <tab heading="Users">
+                            <h5>Select the users who can execute this step</h5>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="list-group scroll-when-needed">
-                                        <a href="#" class="list-group-item active">Usuarios Disponibles</a>
+                                        <a href="#" class="list-group-item active">Availables</a>
                                         <a ng-repeat="u in meta.user.unselected" ng-click="addMember(u)" class="list-group-item animation">
                                             <span>{{u.name}} {{u.lastName}}</span>
                                         </a>
@@ -186,7 +186,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="list-group scroll-when-needed">
-                                        <a href="#" class="list-group-item active">Usuarios Asignados</a>
+                                        <a href="#" class="list-group-item active">Selected</a>
                                         <a ng-repeat="u in meta.user.selected" ng-click="removeMember(u)" class="list-group-item animation">
                                             <span>{{u.name}} {{u.lastName}}</span>
                                         </a>
@@ -197,9 +197,9 @@
                     </tabset>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-sm btn-success">Guardar</span></button>
-                    <button type="button" ng-click="removeStep(selectedStep)" ng-show="selectedStep.id" class="btn btn-sm btn-danger">Eliminar</button>
-                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-primary">Cerrar</button>
+                    <button type="submit" class="btn btn-sm btn-success">Save</span></button>
+                    <button type="button" ng-click="removeStep(selectedStep)" ng-show="selectedStep.id" class="btn btn-sm btn-danger">Remove</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-primary">Close</button>
                 </div>
             </form>
         </div>
