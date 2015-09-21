@@ -2,6 +2,8 @@
 
 Full tracking system written in Go/HTML
 
+[![Build Status](https://drone.io/github.com/mauleyzaola/issue-tracker/status.png)](https://drone.io/github.com/mauleyzaola/issue-tracker/latest)
+
 ###Introduction
 I have been working with [Jira](https://www.atlassian.com/software/jira) for years. In spite how much I like Jira, I find it a bit complex to both ease of use and ability to integrate with other programs.
 
@@ -16,9 +18,6 @@ The frontend is done in HTML / JS with angularjs. I'm not a FrontEnd guy, so pos
 I wish more people to contribute to the project to make it more robust, incorporate additional features and watch it grow. You can work as possible, I'm open to suggestions from detecting a bug or expose an improvement. Any feedback is welcome.
 
 Below are some sample screens, the instructions to configure the application at the bottom and a link to a functional demo, in case you want to see the application running. You can do whatever you want with the demo, but mind that data will be removed every day. So, use it only for testing please.
-
-
-[![Build Status](https://drone.io/github.com/mauleyzaola/issue-tracker/status.png)](https://drone.io/github.com/mauleyzaola/issue-tracker/latest)
 
 ####Dashboard
 ![demo1](https://cloud.githubusercontent.com/assets/1648558/9989053/161dbc80-601b-11e5-81a2-b7e3dd063932.png)
