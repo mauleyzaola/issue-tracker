@@ -23,8 +23,8 @@ angular.module("TrackerApp.Account.controllers", [])
     })
     .controller("Login.Controller", function($http, $rootScope, $scope, $location, AccountService, SessionManagement){
         $scope.userInfo = {
-            email: $location.$$search.email || 'admin@admin.com',
-            password: null || 'admin'
+            email: $location.$$search.email,
+            password: null
         }
 
 
