@@ -4,6 +4,10 @@ For the UI to work it is necessary to copy the content of [sample nginx config f
 ```
 /etc/nginx/sites-available/default
 ```
+On this line
+```
+root /home/mleyzaola/go/src/github.com/mauleyzaola/issue-tracker/static/dist;
+```
 Change the path accordingly to match your environment and restart nginx service.
 ```
 sudo service nginx restart
