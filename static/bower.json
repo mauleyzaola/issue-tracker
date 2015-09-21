@@ -8,7 +8,7 @@
     "angular-route": "~1.4.1",
     "angular-sanitize": "~1.4.1",
     "bootstrap": "~3.3.5",
-    "bootswatch": "~3.3.5+3",
+    "bootswatch": "~3.3.5",
     "components-font-awesome": "~4.3.0",
     "jquery.gritter": "~1.7.4",
     "moment": "~2.10.3",
