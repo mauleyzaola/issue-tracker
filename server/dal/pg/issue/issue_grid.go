@@ -78,7 +78,7 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 	}
 
 	if len(grid.Query) != 0 {
-		query += "and lower(name) like '%" + grid.GetQuery() + "%' "
+		query += "and (lower(name) like '%" + grid.GetQuery() + "%' or lower(pkey) like '%" + grid.GetQuery() + "%') "
 	}
 	if filter.Assignee != nil && len(filter.Assignee.Id) != 0 {
 		pars = append(pars, filter.Assignee.Id)

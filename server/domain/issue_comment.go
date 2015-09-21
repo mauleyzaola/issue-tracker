@@ -41,6 +41,9 @@ func (u *IssueComment) Validate() (err error) {
 }
 
 func (u *IssueComment) Initialize() {
+	if u.Meta == nil {
+		u.Meta = &DocumentMetadata{}
+	}
 	u.Meta.DocumentType = "issueComment"
 	u.Meta.FriendName = "Comment"
 	u.Meta.Id = u.Id

@@ -108,15 +108,6 @@ angular.module("TrackerApp.Issue.controllers", [])
                                         });
                                 }
                             }).then(function(){
-                                IssueService.getDocument($scope.item.id)
-                                    .then(function(data){
-                                        if(data){
-                                            $scope.document = data;
-                                        } else {
-                                            $scope.document = {};
-                                        }
-                                    });
-                            }).then(function(){
                                 PermissionSchemeService.permissionAvailableUser({
                                     user:{id:$scope.currentSession.user.id},
                                     issue:{id:$scope.item.id, project:$scope.item.project}

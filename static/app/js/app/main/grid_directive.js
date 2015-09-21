@@ -84,7 +84,7 @@ angular.module('TrackerApp.Grid.Directives', [])
                     html += '</div>';
                     html += '</div>';
                     html += '<div class="col-lg-3">';
-                    html += '<span>Pagina</span>';
+                    html += '<span>Page</span>';
                     html += '<select ng-model="config.grid.pageSize" ng-options="option as option for option in config.grid.pageSizes"></select>';
                     html += '</div>';
                     html += '<div class="col-lg-6">';

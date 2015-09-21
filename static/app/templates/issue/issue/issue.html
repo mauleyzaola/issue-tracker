@@ -23,11 +23,11 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="pull-left" ng-show="item.id && permissions.EDIT_ISSUE">
-                                    <button class="btn btn-primary btn-xs" ng-click="changeStep(s)" type="button" ng-repeat="s in steps" tooltip="{{s.nextStatus.description}}" >{{s.name}}</button>
+                                    <button class="btn btn-primary btn-sm" ng-click="changeStep(s)" type="button" ng-repeat="s in steps" tooltip="{{s.nextStatus.description}}" >{{s.name}}</button>
                                 </div>
                                 <div class="pull-right" ng-show="item.id">
-                                    <button class="btn btn-danger btn-xs" ng-click="toggleSubscription()" type="button" ng-show="isSubscribed">Unsubscribe</button>
-                                    <button class="btn btn-info btn-xs" ng-click="toggleSubscription()" type="button" ng-show="!isSubscribed">Subscribe</button>
+                                    <button class="btn btn-danger btn-sm" ng-click="toggleSubscription()" type="button" ng-show="isSubscribed">Unsubscribe</button>
+                                    <button class="btn btn-info btn-sm" ng-click="toggleSubscription()" type="button" ng-show="!isSubscribed">Subscribe</button>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                         <td>{{c.lastModified | dateTimeFormat}}</td>
                         <td>{{c.user.name}} {{c.user.lastName}}</td>
                         <td><span ng-bind-html="c.body | linky:'_blank'"></span></td>
-                        <td><a href="#" data-toggle="modal" data-target="#commentDialog" ng-click="editComment(c)">Editar</a></td>
+                        <td><a href="#" data-toggle="modal" data-target="#commentDialog" ng-click="editComment(c)">Edit</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -239,9 +239,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit"  class="btn btn-xs btn-success"><span> Save</span></button>
-                    <button type="button" ng-click="removeComment(selectedComment)" ng-show="selectedComment.id && (permissions.DELETE_OWN_COMMENT || permissions.DELETE_ALL_COMMENT)" class="btn btn-xs btn-danger"><span> Eliminar</span></button>
-                    <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Cerrar</span></button>
+                    <button type="submit"  class="btn btn-sm btn-success"><span> Save</span></button>
+                    <button type="button" ng-click="removeComment(selectedComment)" ng-show="selectedComment.id && (permissions.DELETE_OWN_COMMENT || permissions.DELETE_ALL_COMMENT)" class="btn btn-sm btn-danger"><span> Eliminar</span></button>
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-primary"><span> Cerrar</span></button>
                 </div>
             </form>
         </div>
@@ -258,7 +258,7 @@
                 <erp-grid config="gridProject" params="gridProjectParams"></erp-grid>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Close</span></button>
+                <button type="button" data-dismiss="modal" class="btn btn-sm btn-primary"><span> Close</span></button>
             </div>
         </div>
     </div>

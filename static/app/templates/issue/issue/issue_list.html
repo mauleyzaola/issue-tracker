@@ -2,16 +2,14 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Clave</th>
-                <th>Proyecto</th>
-                <th>Nombre</th>
-                <th>Asignado a</th>
-                <th>Responsable</th>
-                <th>Prioridad</th>
-                <th>Estado</th>
-                <th>Vencimiento</th>
-                <th>Creado</th>
-                <th>Ultimo Cambio</th>
+                <th>Key</th>
+                <th>Project</th>
+                <th>Name</th>
+                <th>Assignee</th>
+                <th>Reporter</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Due</th>
             </tr>
         </thead>
         <tbody>
@@ -28,8 +26,6 @@
                 <td>{{s.priority}}</td>
                 <td>{{s.status}}</td>
                 <td>{{s.dueDate | dateFormat}}</td>
-                <td>{{s.dateCreated | dateFormat}}</td>
-                <td>{{s.lastModified | dateFormat}}</td>
             </tr>
         </tbody>
     </table>
