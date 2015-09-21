@@ -99,6 +99,7 @@ func ParseConfiguration(fileName string) (app *Application) {
 	ops.AccountDb.SetSessionDb(&sessionDb)
 	ops.AccountDb.SetUserDb(&userDb)
 
+	ops.BootstrapDb.SetPriorityDb(&priorityDb)
 	ops.BootstrapDb.SetStatusDb(&statusDb)
 	ops.BootstrapDb.SetUserDb(&userDb)
 

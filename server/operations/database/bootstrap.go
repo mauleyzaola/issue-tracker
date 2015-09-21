@@ -5,6 +5,9 @@ import (
 )
 
 type Bootstrap interface {
+	PriorityDb() Priority
+	SetPriorityDb(item *Priority)
+
 	StatusDb() Status
 	SetStatusDb(item *Status)
 
@@ -26,4 +29,10 @@ type Bootstrap interface {
 
 	//Bootstraps all the permission names
 	CreatePermissionNames(tx interface{}) error
+
+	//Add basic workflows as part of the startup
+	BootstrapWorkflows(tx interface{}) error
+
+	//Add some values to catalog
+	BootstrapPriorities(tx interface{}) error
 }
