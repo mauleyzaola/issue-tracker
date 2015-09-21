@@ -52,7 +52,7 @@ Next, create two databases in postgres; one is for running the unit tests, the o
 sudo -u postgres psql -c 'create database tracker;'
 sudo -u postgres psql -c 'create database tracker_test;'
 ```
-When databases have been created, execute the ```check.sh``` script. It will download the go dependencies, create the database objects and run the unit tests.
+When databases have been created, execute the [check.sh](check.sh) script. It will download the go dependencies, create the database objects and run the unit tests.
 ```
 ./check.sh
 ```
