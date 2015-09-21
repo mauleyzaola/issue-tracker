@@ -31,7 +31,8 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 			from	view_issues i 
 			join	project p on p.id = i.idproject 
 			join	permission_scheme ps on ps.id = p.idpermissionscheme 
-			where	exists(	/* user direct access */ 
+			where	exists(	
+					/* user direct access */ 
 					select	null 
 					from	permission_scheme_item i 
 					join	permission_name n on n.id = i.idpermissionname 
@@ -39,6 +40,7 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 					and	i.iduser = $2 
 					and	i.idpermissionscheme = ps.id 
 					union all 
+					
 					/* user / group direct access */ 
 					select	null 
 					from	permission_scheme_item i 
@@ -46,9 +48,10 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 					join	user_group g on g.id = i.idgroup 
 					join	groups gu on gu.id = g.idgroup
 					where	n.name = $1 
-					and		gu.iduser = $2 
+					and		g.iduser = $2 
 					and	i.idpermissionscheme = ps.id 
 					union all 
+					
 					/* user / role access */ 
 					select	null 
 					from	permission_scheme_item i 
@@ -60,6 +63,7 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 					and		pm.iduser = $2 
 					and	pr.idproject = p.id 
 					union all 
+					
 					/* group / role access */ 
 					select	null 
 					from	permission_scheme_item i 
@@ -68,7 +72,7 @@ func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.Is
 					join	project_role pr on pr.idrole = r.id 
 					join	project_role_member pm on pm.idprojectrole = pr.id 
 					join	groups g on g.id = pm.idgroup 
-					join	user_group gu on gu.id = g.id group
+					join	user_group gu on gu.idgroup = g.id
 					where	n.name = $1 
 					and		gu.iduser = $2 
 					and	pr.idproject = p.id)) as t 

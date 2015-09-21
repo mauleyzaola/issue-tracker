@@ -1,7 +1,6 @@
 package account
 
 import (
-	"database/sql"
 	"errors"
 	"time"
 
@@ -46,7 +45,7 @@ func (t *AccountDb) FullLoadUser(tx interface{}, user *domain.User) (err error) 
 	} else if len(user.Email) != 0 {
 		err = t.Base.Executor(tx).SelectOne(&user, "select * from users where email=$1", user.Email)
 	} else {
-		err = errors.New("No hay suficiente informacion para cargar el usuario")
+		err = errors.New("there is not enough information to load the user")
 	}
 	return
 }
@@ -61,19 +60,19 @@ func (t *AccountDb) LoginUser(tx interface{}, email, password string, ipaddress 
 
 	err := t.Base.Executor(tx).SelectOne(item, "select * from users where email=$1", email)
 	if err != nil {
-		return nil, errors.New("Email o Password invalidos")
+		return nil, errors.New("email or password are invalid")
 	}
 
 	if len(item.Id) == 0 {
-		return nil, errors.New("Email invalido")
+		return nil, errors.New("invalid email")
 	}
 
 	if tecutils.Encrypt(password) != item.Password && validatePassword {
-		return nil, errors.New("Email o password incorrectos")
+		return nil, errors.New("email or password are invalid")
 	}
 
 	if !item.IsActive {
-		return nil, errors.New("El usuario es invalido para esta operacion")
+		return nil, errors.New("user is invalid")
 	}
 
 	item, err = t.UserDb().Load(tx, item.Id)
@@ -81,7 +80,6 @@ func (t *AccountDb) LoginUser(tx interface{}, email, password string, ipaddress 
 		return nil, err
 	}
 
-	//actualizar la informacion de login
 	item.LoginCount++
 	if item.LastLogin == nil {
 		item.LastLogin = &time.Time{}
@@ -92,7 +90,6 @@ func (t *AccountDb) LoginUser(tx interface{}, email, password string, ipaddress 
 		return nil, err
 	}
 
-	//eliminar sesiones que hayan expirado para el usuario conectado
 	_, err = t.Base.Executor(tx).Exec("delete from sessions where iduser=$1 and expires < now()", item.Id)
 	if err != nil {
 		return nil, err
@@ -143,8 +140,8 @@ func (t *AccountDb) LoginDelay(tx interface{}, delay time.Duration) error {
 
 func (t *AccountDb) PasswordRecoverCreateToken(tx interface{}, user *domain.User) error {
 	err := t.FullLoadUser(tx, user)
-	if err == sql.ErrNoRows {
-		return errors.New("No se encuentra el usuario solicitado")
+	if err != nil {
+		return err
 	}
 	user.TokenEmail = tecutils.UUID()
 	_, err = t.Base.Executor(tx).Update(user)
@@ -155,21 +152,19 @@ func (t *AccountDb) VerifyTokenEmail(tx interface{}, user *domain.User, ipaddres
 	requestedToken := user.TokenEmail
 
 	if len(requestedToken) == 0 {
-		return errors.New("El token proporcionado es invalido")
+		return errors.New("provided token is invalid")
 	}
 
 	err := t.FullLoadUser(tx, user)
 	if err != nil {
-		err = errors.New("El token proporcionado es invalido")
-		return err
+		return errors.New("provided token is invalid")
 	}
 
 	if requestedToken != user.TokenEmail {
-		err = errors.New("El token proporcionado no coincide con la base de datos")
+		return errors.New("provided token is invalid")
 		return err
 	}
 
-	//resetear el password y borrar el tokenemail
 	user.Password = ""
 	user.TokenEmail = ""
 	_, err = t.Base.Executor(tx).Update(user)
@@ -177,7 +172,6 @@ func (t *AccountDb) VerifyTokenEmail(tx interface{}, user *domain.User, ipaddres
 		return err
 	}
 
-	//simular un login para poder asignarle un token al usuario y evitar que el password, aunque sea temporal, se muestre en el UI
 	session, err := t.LoginUser(tx, user.Email, "", ipaddress, false)
 	if err != nil {
 		return err
