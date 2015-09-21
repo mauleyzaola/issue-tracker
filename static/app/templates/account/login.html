@@ -1,0 +1,70 @@
+<div>
+    <form ng-submit="login()" ng-hide="isRecoveringPassword">
+        <fieldset>
+            <h5>Enter Email and Password</h5>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Email</label>
+                    <div class="input-group merged">
+                    <span class="input-group-addon">
+                        <i class="fa fa-envelope"></i>
+                    </span>
+                        <input class="form-control" type="email" ng-model="userInfo.email" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Password</label>
+                    <div class="input-group merged">
+                    <span class="input-group-addon">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                        <input class="form-control" type="password" ng-model="userInfo.password" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <button class="btn btn-sm btn-success" type="submit">
+                        <span>Login</span>
+                    </button>
+                    <button class="btn btn-sm btn-default" type="button" ng-click="exit()">
+                        <span>Exit</span>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <a href="#" ng-click="isRecoveringPassword=true">Reset Password</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <form ng-hide="!isRecoveringPassword">
+        <p>Enter your email and submit form to reset your password</p>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <div class="input-group merged">
+                <span class="input-group-addon">
+                    <i class="fa fa-envelope medium-icon"></i>
+                </span>
+                    <input class="form-control" type="email" ng-model="userInfo.email" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <button class="btn btn-sm btn-primary" type="submit" ng-click="submitRecoverPassword()">
+                    <i class="fa fa-check"></i>
+                    <span>Reset Password</span>
+                </button>
+                <button class="btn btn-sm btn-warning" type="button" ng-click="isRecoveringPassword=false">
+                    <i class="fa fa-times"></i>
+                    <span>Cancel</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

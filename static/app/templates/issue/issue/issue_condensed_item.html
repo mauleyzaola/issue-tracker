@@ -1,0 +1,17 @@
+<div>
+    <div class="row" ng-show="item.id">
+        <div class="col-sm-6">
+        <span ng-show="item.project">
+            <i class="fa fa-building-o"></i> Proyecto: <a ng-href="{{resolveUrl(item.project)}}">{{item.project.name}}</a>
+        </span> <br/>
+            <i class="fa fa-tasks"></i> Tarea: <a ng-href="{{resolveUrl(item)}}" title="{{item.name}}">{{item.pkey}}</a> - {{item.name}}<br>
+            <i class="fa fa-calendar"></i> Vencimiento: {{item.dueDate | dateFormat}}<br>
+            Estado: {{item.status.name}}<br>
+            Prioridad: {{item.priority.name}}<br>
+        </div>
+        <div class="col-sm-6">
+            <i class="fa fa-user-md" ng-show="item.assignee" ></i> Asignado a: {{item.assignee.name}} {{item.assignee.lastName}}<br>
+            <i class="fa fa-user" ></i> Responsable: {{item.reporter.name}} {{item.reporter.lastName}}<br>
+        </div>
+    </div>
+</div>

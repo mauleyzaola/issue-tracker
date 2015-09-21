@@ -1,0 +1,55 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a ng-href="{{resolveUrl(item)}}">
+            <i class="fa fa-calendar"></i>
+            Tarea: {{item.pkey}}
+        </a>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label>Nombre</label>
+            <a class="form-control" ng-href="{{resolveUrl(item)}}">
+                {{item.name}}
+            </a>
+        </div>
+        <div class="form-group" ng-show="item.project">
+            <label>Proyecto</label>
+            <a class="form-control" ng-href="{{resolveUrl(item.project)}}" >
+                {{item.project.name}}
+            </a>
+        </div>
+        <div class="form-group">
+            <label>Estado</label>
+            <span class="form-control">{{item.status.name}}</span>
+        </div>
+        <div class="form-group">
+            <label>Prioridad</label>
+            <span class="form-control">{{item.priority.name}}</span>
+        </div>
+        <div class="form-group">
+            <label>Workflow</label>
+            <a class="form-control" ng-href="{{resolveUrl(item.workflow)}}">{{item.workflow.name}}</a>
+        </div>
+        <div class="form-group">
+            <label>Descripcion</label>
+            <span class="form-control">{{item.description}}</span>
+        </div>
+        <div class="form-group" ng-show="item.assignee">
+            <label>Asignado a</label>
+            <span class="form-control">{{item.assignee.name}} {{item.assignee.lastName}}</span>
+        </div>
+        <div class="form-group">
+            <label>Responsable</label>
+            <span class="form-control">{{item.reporter.name}} {{item.reporter.lastName}}</span>
+        </div>
+        <div class="form-group">
+            <label>Vencimiento</label>
+            <span class="form-control">{{item.dueDate | dateFormat}}</span>
+        </div>
+        <div class="form-group" ng-show="item.resolvedDate">
+            <label>Resuelta</label>
+            <span class="form-control">{{item.resolvedDate | dateFormat}}</span>
+        </div>
+    </div>
+</div>
+

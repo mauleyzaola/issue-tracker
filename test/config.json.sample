@@ -1,0 +1,11 @@
+{
+	"environment":"test",
+	"baseUrl":"http://localhost",
+	"baseApiName":"api",
+	"PostgresDb": {
+		"host":"localhost",
+		"databaseName": "tracker_test",
+		"userName": "postgres",
+		"password":"nevermind"
+	}
+}

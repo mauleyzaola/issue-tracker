@@ -1,0 +1,61 @@
+<div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="pull-left">
+                <button type="button" class="btn btn-sm btn-info" ng-click="newItem()">New Project</button>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="pull-right form-group">
+                <pagination total-items="pagination.totalCount" ng-model="pagination.currentPage"
+                            max-size="pagination.maxSize"
+                            previous-text="Prev" next-text="Next" first-text="First" last-text="Last"
+                            boundary-links="true" rotate="false" num-pages="pagination.pageCount"></pagination>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <ul class="list-fill">
+                <li class="list-fill-item fade fade-mouseover" ng-repeat="i in items" ng-click="browseItem(i)">
+                    <div class="thumbnail">
+                        <div ng-class="getCss(i)">
+                            <h4>
+                                <i class="fa fa-bar-chart-o"></i>
+                                <span> {{i.name}}</span>
+                            </h4>
+                        </div>
+
+                        <div class="panel-body">
+                            <p>
+                                <i class="fa fa-calendar"></i>
+                                <span class="small"> {{i.begins | dateFormat}}</span>
+                                <i class="fa fa-calendar-o"></i>
+                                <span class="small"> {{i.ends | dateFormat}}</span>
+                            </p>
+
+                            <p>
+                                <i class="fa fa-bar-chart-o"></i>
+                                <span class="small"> {{i.issueCount - i.notResolvedCount}} / {{i.issueCount}} {{i.getCss(i)}} </span>
+                            </p>
+
+                            <p>
+                                <i class="fa fa-user-md"></i>
+                                <span class="small"> {{i.projectLead | trunc:20}}</span>
+                            </p>
+
+                            <p>
+                                <progressbar class="condensed" type="{{getType(i)}}" value="i.percentageCompleted * 100">
+                                    {{i.percentageCompleted * 100 | round}}%
+                                </progressbar>
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

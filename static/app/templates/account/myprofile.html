@@ -1,0 +1,142 @@
+<div class="row">
+    <div class="col-lg-3">
+        <div class="list-group">
+            <a ng-click="selectedTab=1" ng-class="{active: selectedTab == 1}" class="list-group-item">Personal Information</a>
+            <a ng-click="selectedTab=2" ng-class="{active: selectedTab == 2}" class="list-group-item">Notifications</a>
+            <a ng-click="selectedTab=3" ng-class="{active: selectedTab == 3}" class="list-group-item">Change Password</a>
+            <a ng-click="selectedTab=4" ng-class="{active: selectedTab == 4}" class="list-group-item">Tokens</a>
+            <a ng-click="selectedTab=5" ng-class="{active: selectedTab == 5}" class="list-group-item">Subscriptions</a>
+            <a ng-click="selectedTab=6" ng-class="{active: selectedTab == 6}" class="list-group-item">Theme</a>
+        </div>
+    </div>
+    <div class="col-lg-9">
+
+        <div ng-show="selectedTab==1" class="row">
+            <form ng-submit="saveUserData()">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" ng-model="item.name" class="col-md-4 form-control"/>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" ng-model="item.lastName" class="col-md-4 form-control"/>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" ng-model="item.email" ng-disabled="" class="col-md-4 form-control"/>
+                </div>
+                <div class="pull-left">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    <button type="button" ng-click="exit()" class="btn btn-default btn-sm">Exit</button>
+                </div>
+            </form>
+        </div>
+
+        <div ng-show="selectedTab==2" class="row">
+            <form ng-submit="saveUserData()">
+                <div class="form-group">
+                    <label class="control-label">
+                        <input type="checkbox" ng-model="item.metadata.emailNotifications" />
+                        Email Notifications
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        <input type="checkbox" ng-model="item.metadata.recieveOwnChanges" />
+                        Notify on my own changes
+                    </label>
+                </div>
+                <div class="pull-left">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    <button type="button" ng-click="exit()" class="btn btn-default btn-sm">Exit</button>
+                </div>
+            </form>
+        </div>
+
+        <div ng-show="selectedTab==3" class="row">
+            <form ng-submit="saveNewPassword()">
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" ng-model="password1" class="col-lg-4 form-control"/>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" ng-model="password2" class="col-lg-4 form-control"/>
+                </div>
+                <div class="pull-left">
+                    <button type="submit" ng-disabled="password1 != password2 || !password1" class="btn btn-success btn-sm">Save</button>
+                    <button type="button" ng-click="exit()" class="btn btn-default btn-sm">Exit</button>
+                </div>
+            </form>
+        </div>
+
+        <div ng-show="selectedTab==4" class="row">
+            <div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Login</th>
+                        <th>Expires</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="s in sessions">
+                        <td>{{s.ipAddress}}</td>
+                        <td>{{s.dateCreated | dateTimeFormat}}</td>
+                        <td>{{s.expires | dateTimeFormat}}</td>
+                        <td>
+                            <a ng-click="deleteToken($index,s)">Remove</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div ng-show="selectedTab==5" class="row">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5>Issues you are subscribed to</h5>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="clearSubscriptionOnClick" > Remove notification on click
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <erp-grid config="gridSubscriptions" params="gridSubscriptionsParams"></erp-grid>
+                </div>
+            </div>
+        </div>
+
+
+        <div ng-show="selectedTab==6" class="row">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form ng-submit="saveUserData()">
+                        <div class="form-group">
+                            <label>Theme</label>
+                            <select ng-model="item.metadata.cssTheme" ng-options="c.pkey as c.name for c in themes" class="form-control"></select>
+                        </div>
+                        <div class="pull-left">
+                            <button type="submit" class="btn btn-success btn-sm">Save</button>
+                            <button type="button" ng-click="exit()" class="btn btn-default btn-sm">Exit</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

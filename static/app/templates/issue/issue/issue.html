@@ -1,0 +1,295 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="pull-left">
+            <div class="alert alert-info">
+                <span>{{item.pkey}} {{item.name}} ({{item.status.name}})</span>
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="alert alert-info"  ng-show="item.parent">
+                Belongs to:
+                <a href="#" ng-click="resolveIssueUrl(item.parent)" >{{item.parent.pkey}} {{item.parent.name}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div>
+    <tabset>
+        <tab heading="Issue">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form ng-submit="saveItem(item)" role="form" class="form-horizontal">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="pull-left" ng-show="item.id && permissions.PERMISSION_EDIT_ISSUE">
+                                    <button class="btn btn-primary btn-xs" ng-click="changeStep(s)" type="button" ng-repeat="s in steps" tooltip="{{s.nextStatus.description}}" >{{s.name}}</button>
+                                </div>
+                                <div class="pull-right">
+                                    <button class="btn btn-danger btn-xs" ng-click="toggleSubscription()" type="button" ng-show="isSubscribed">Unsubscribe</button>
+                                    <button class="btn btn-info btn-xs" ng-click="toggleSubscription()" type="button" ng-show="!isSubscribed">Subscribe</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Project</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" data-target="#projectSelectDialog" data-toggle="modal" ><i class="fa fa-pencil"></i> </span>
+                                            <a class="form-control" ng-href="{{resolveUrl(item.project)}}">{{item.project.name}}</a>
+                                        </div>
+                                    </div>
+
+                                    <label class="col-sm-2 control-label">Created</label>
+                                    <div class="col-sm-4">
+                                        <span class="form-control">{{item.dateCreated | dateTimeFormat}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="item.id">
+                                    <label class="col-sm-2 control-label">Status</label>
+                                    <div class="col-sm-4">
+                                        <span class="form-control">{{item.status.name}}</span>
+                                        <span class="small">{{item.status.description}}</span>
+                                    </div>
+                                    <label class="col-sm-2 control-label" ng-show="item.resolvedDate">Resolved</label>
+                                    <div class="col-sm-4" ng-show="item.resolvedDate">
+                                        <span class="form-control">{{item.resolvedDate | dateTimeFormat}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Due Date</label>
+                                    <div class="col-sm-4">
+                                        <erp-date-picker ng-show="isEditable && permissions.PERMISSION_CHANGE_DUEDATE" value="item.dueDate" is-required="true"></erp-date-picker>
+                                        <span class="form-control" ng-show="!isEditable || !permissions.PERMISSION_CHANGE_DUEDATE" >{{item.dueDate | dateFormat}}</span>
+                                    </div>
+                                    <label class="col-sm-2 control-label">Prioridad</label>
+                                    <div class="col-sm-4">
+                                        <select  ng-show="isEditable" ng-model="item.priority.id" ng-options="i.id as i.name for i in priorities" class="form-control"></select>
+                                        <span class="form-control" ng-show="!isEditable" >{{item.priority.name}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Workflow</label>
+                                    <div class="col-sm-4">
+                                        <select ng-show="!item.id" ng-model="item.workflow.id" ng-options="i.id as i.name for i in workflows" class="form-control"></select>
+                                        <a class="form-control" ng-show="item.id" ng-href="{{resolveUrl(item.workflow)}}" >{{item.workflow.name}}</a>
+                                    </div>
+                                    <label class="col-sm-2 control-label">Name</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" ng-model="item.name" ng-show="isEditable" />
+                                        <span class="form-control" ng-show="!isEditable" >{{item.name}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Description</label>
+                                    <div class="col-sm-10">
+                                        <textarea ng-disabled="!isEditable" class="form-control" rows="5" ng-model="item.description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Assignee</label>
+                                    <div class="col-sm-4">
+                                        <select ng-show="isEditable && permissions.PERMISSION_ASSIGN_USER" ng-model="item.assignee.id" ng-options="i.id as i.name + ' ' + i.lastName for i in assignees" class="form-control"></select>
+                                        <a class="form-control" ng-href="{{resolveUrl(item.assignee)}}" ng-show="!isEditable || !permissions.PERMISSION_ASSIGN_USER" >{{item.assignee.name}} {{item.assignee.lastName}}</a>
+                                        <a href="#" ng-click="assignToMe()" ng-show="isEditable && permissions.PERMISSION_ASSIGN_USER">Assigne to me</a>
+                                    </div>
+                                    <label class="col-sm-2 control-label">Responsable</label>
+                                    <div class="col-sm-4">
+                                        <select ng-show="isEditable && permissions.PERMISSION_CHANGE_REPORTER" ng-model="item.reporter.id" ng-options="i.id as i.name + ' ' + i.lastName for i in reporters" class="form-control"></select>
+                                        <a class="form-control" ng-href="{{resolveUrl(item.reporter)}}" ng-show="!isEditable || !permissions.PERMISSION_CHANGE_REPORTER" >{{item.reporter.name}} {{item.reporter.lastName}}</a>
+                                        <a href="#" ng-click="reporterIsMe()" ng-show="isEditable && permissions.PERMISSION_ASSIGN_USER">Make me reporter</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="pull-left">
+                                    <crud-buttons></crud-buttons>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row" ng-show="item.id">
+                <div class="col-lg-12">
+                    <h5>Subtasks</h5>
+                    <issue-list items="subtasks" resolve-url="resolveUrl"></issue-list>
+                    <div class="pull-left" >
+                        <button class="btn btn-info btn-sm" type="button" ng-click="addSubtask()">Add Subtask</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-show="item.id">
+                <div class="col-lg-12">
+                    <h5>Attachments</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>User</th>
+                            <th>File</th>
+                            <th>Size</th>
+                            <th ng-show="isEditable && (permissions.PERMISSION_DELETE_OWN_ATTACHMENT || permissions.PERMISSION_DELETE_ALL_ATTACHMENT)"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="a in attachments">
+                            <td>{{$index+1}}</td>
+                            <td>{{a.dateCreated | dateTimeFormat}}</td>
+                            <td>{{a.user.name}} {{a.user.lastName}}</td>
+                            <td><file-item-download-link token="{{currentSession.id}}" item="a.fileItem"></file-item-download-link></td>
+                            <td class="text-right">{{a.fileItem.bytes | sizeGeneric}}</td>
+                            <td ng-show="isEditable && (permissions.PERMISSION_DELETE_OWN_ATTACHMENT || permissions.PERMISSION_DELETE_ALL_ATTACHMENT)"><a href="#" ng-click="deleteAttachment(a,$index)">Remove</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-group" ng-show="isEditable && permissions.PERMISSION_ADD_ATTACHMENT">
+                        <div class="btn btn-sm btn-info" ngf-select
+                             ngf-multiple="true"
+                             ngf-change="onFileSelect($files, addAttachment)">
+                                Upload Files
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </tab>
+
+        <tab heading="Comments ({{comments.length}})" ng-show="item.id">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Last Changed</th>
+                        <th>User</th>
+                        <th>Comment</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="c in comments">
+                        <td>{{c.dateCreated | dateTimeFormat}}</td>
+                        <td>{{c.lastModified | dateTimeFormat}}</td>
+                        <td>{{c.user.name}} {{c.user.lastName}}</td>
+                        <td><span ng-bind-html="c.body | linky:'_blank'"></span></td>
+                        <td><a href="#" data-toggle="modal" data-target="#commentDialog" ng-click="editComment(c)">Editar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-info btn-sm" ng-show="permissions.PERMISSION_ADD_COMMENT" ng-click="addComment()" data-toggle="modal" data-target="#commentDialog" >Add Comment</button>
+        </tab>
+
+        <tab heading="Subscribers ({{subscribers.selected.length}})" ng-show="item.id">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active">Available</a>
+                        <a ng-repeat="u in subscribers.unselected" ng-click="toggleSubscriptionAny(u)" class="list-group-item animation"><span>{{u.name}} {{u.lastName}}</span></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active">Subscribed</a>
+                        <a ng-repeat="u in subscribers.selected" ng-click="toggleSubscriptionAny(u)" class="list-group-item animation"><span>{{u.name}} {{u.lastName}}</span></a>
+                    </div>
+                </div>
+            </div>
+        </tab>
+
+
+        <tab heading="History" ng-show="logs.length!=0">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Operation</th>
+                        <th>Field</th>
+                        <th>Old Value</th>
+                        <th>New Value</th>
+                        <th>Ip</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="l in logs">
+                        <td>{{$index+1}}</td>
+                        <td>{{l.dateCreated | dateTimeFormat}}</td>
+                        <td>{{l.user.name}} {{l.user.lastName}}</td>
+                        <td>{{l.operationType.name}}</td>
+                        <td>{{l.field}}</td>
+                        <td>{{l.oldValue}}</td>
+                        <td>{{l.newValue}}</td>
+                        <td>{{l.user.session.ipAddress}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </tab>
+    </tabset>
+</div>
+
+
+<div id="commentDialog" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form ng-submit="saveComment(selectedComment)" class="form-horizontal" role="form">
+                <div class="modal-header">
+                    <h4 ng-show="selectedComment.id">Edit Comment</h4>
+                    <h4 ng-hide="selectedComment.id">New Comment</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Date</label>
+                        <div class="col-sm-10">
+                            <span class="form-control">{{selectedComment.dateCreated | dateTimeFormat}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">User</label>
+                        <div class="col-sm-10">
+                            <span class="form-control">{{selectedComment.user.name}} {{selectedComment.user.lastName}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Body</label>
+                        <div class="col-sm-10">
+                            <textarea ng-model="selectedComment.body" rows="5" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit"  class="btn btn-xs btn-success"><span> Save</span></button>
+                    <button type="button" ng-click="removeComment(selectedComment)" ng-show="selectedComment.id && (permissions.PERMISSION_DELETE_OWN_COMMENT || permissions.PERMISSION_DELETE_ALL_COMMENT)" class="btn btn-xs btn-danger"><span> Eliminar</span></button>
+                    <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Cerrar</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="projectSelectDialog" class="modal fade">
+    <div class="modal-dialog large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Select a Project for this Issue</h5>
+            </div>
+            <div class="modal-body">
+                <erp-grid config="gridProject" params="gridProjectParams"></erp-grid>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Close</span></button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html class="no-js" ng-app="TrackerApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Issue Tracker</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+
+    <!--start DEV css imports-->
+    <link href="/js/lib/jquery.gritter/css/jquery.gritter.css" rel="stylesheet" />
+    <link href="/js/lib/components-font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!--end DEV css imports-->
+
+    <!--start PROD css imports
+    <link href="/stylesheets/jquery.gritter.css" rel="stylesheet" />
+    <link href="/stylesheets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    end PROD css imports-->
+
+    <!-- main css -do not modify manually, this is loaded at runtime- -->
+    <link href="/js/lib/bootswatch/simplex/bootstrap.min.css" rel="stylesheet" id="baseTheme">
+
+    <!--base custom css imports-->
+    <link href="/stylesheets/custom.css" rel="stylesheet" media="screen">
+
+
+
+  </head>
+  <body ng-controller="AppCtrl">
+
+    <!-- Application content -->
+    <div>
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse">
+            <!-- main menu -->
+            <ul class="nav navbar-nav">
+              <li>
+                <a href="/">Home</a>
+              </li>
+            </ul>
+            <!-- login menu -->
+            <ul class="nav navbar-nav" ng-show="!isLoggedIn()">
+              <li>
+                <a href="/account/login">
+                  <i class="fa fa-unlock"></i>
+                  <span>Login</span>
+                </a>
+              </li>
+            </ul>
+
+            <!-- main menu -->
+            <ul class="nav navbar-nav" ng-show="isLoggedIn()">
+              <li class="dropdown" ng-repeat="group in menuItems">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                  <i class="fa" ng-class="group.iconCss"></i>
+                  <span> {{group.name}}</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-left">
+                  <li ng-repeat="item in group.items">
+                    <a ng-href="{{item.target}}">{{item.name}}</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <!-- /main menu -->
+
+
+
+            <!-- user menu -->
+            <ul class="nav navbar-nav navbar-right" ng-show="isLoggedIn()">
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-user"></i>
+                  <span>{{currentSession.user.name}} {{currentSession.user.lastName}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/account/myprofile">My Profile</a>
+                    <a href="/account/logout">Logout</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <!-- /user menu -->
+
+            <!-- Search form -->
+
+            <form class="navbar-form navbar-right" ng-show="isLoggedIn()" role="search">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search" ng-model="searchQuery" />
+              </div>
+              <button type="submit" class="btn btn-sm btn-default">
+                <i class="fa fa-search"></i>
+              </button>
+            </form>
+
+            <!-- /Search form -->
+
+          </div><!-- navbar-collapse -->
+        </div><!-- container -->
+      </nav>
+
+      <!-- Dynamic Content -->
+      <div ng-view="" class="container-fluid">
+      </div>
+    </div>
+
+    <!-- Google Analytics
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-5341546-34', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    Google Analytics -->
+
+
+    <!-- build:js /scripts/vendor.js -->
+    <!-- Vendor Dependencies -->
+    <script src="/js/lib/jquery/dist/jquery.js"></script>
+    <script src="/js/lib/angular/angular.js"></script>
+    <script src="/js/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/js/lib/angular-route/angular-route.js"></script>
+    <script src="/js/lib/ng-file-upload/ng-file-upload.js"></script>
+    <script src="/js/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="/js/lib/jquery.gritter/js/jquery.gritter.js"></script>
+    <script src="/js/lib/moment/moment.js"></script>
+    <!-- /build -->
+
+    <!-- Global Dependencies -->
+    <script src="/js/lib/underscore/underscore.js"></script>
+    <script src="/js/lib/angular-sanitize/angular-sanitize.js"></script>
+    <!-- Global -->
+
+    <!-- build:js /scripts/app.js -->
+    <!-- Application Dependencies -->
+    <script src="/js/app/app.js"></script>
+    <script src="/js/app/main/services.js"></script>
+    <script src="/js/app/main/controllers.js"></script>
+    <script src="/js/app/main/filters.js"></script>
+    <script src="/js/app/main/directives.js"></script>
+    <script src="/js/app/main/apipath.services.js"></script>
+    <script src="/js/app/main/notification.services.js"></script>
+    <script src="/js/app/main/browser.services.js"></script>
+    <script src="/js/app/main/query.services.js"></script>
+    <script src="/js/app/main/catalog.services.js"></script>
+    <script src="/js/app/account/account.directives.js"></script>
+    <script src="/js/app/main/grid_directive.js"></script>
+    <script src="/js/app/main/file_item.services.js"></script>
+
+    <script src="/js/app/dashboard/dashboard.services.js"></script>
+
+
+    <!-- Account -->
+    <script src="/js/app/account/account.controllers.js"></script>
+    <script src="/js/app/account/account.services.js"></script>
+
+
+    <!-- Catalog -->
+    <script src="/js/app/catalog/group/group.controllers.js"></script>
+    <script src="/js/app/catalog/group/group.services.js"></script>
+    <script src="/js/app/catalog/role/role.controllers.js"></script>
+    <script src="/js/app/catalog/role/role.services.js"></script>
+    <script src="/js/app/catalog/user/user.controllers.js"></script>
+    <script src="/js/app/catalog/user/user.services.js"></script>
+    <script src="/js/app/catalog/permission_scheme/permission_scheme.controllers.js"></script>
+    <script src="/js/app/catalog/permission_scheme/permission_scheme.services.js"></script>
+    <script src="/js/app/catalog/priority/priority.controllers.js"></script>
+    <script src="/js/app/catalog/priority/priority.services.js"></script>
+
+    <!-- Issues -->
+    <script src="/js/app/issue/issue/issue.controllers.js"></script>
+    <script src="/js/app/issue/issue/issue.services.js"></script>
+    <script src="/js/app/issue/directives/issue.directives.js"></script>
+
+    <!-- Projects -->
+    <script src="/js/app/issue/project/project.controllers.js"></script>
+    <script src="/js/app/issue/project/project.services.js"></script>
+
+    <!-- Workflows -->
+    <script src="/js/app/issue/workflow/workflow.controllers.js"></script>
+    <script src="/js/app/issue/workflow/workflow.services.js"></script>
+    <!-- /build -->
+</body>
+</html>

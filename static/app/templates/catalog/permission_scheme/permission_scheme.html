@@ -1,0 +1,244 @@
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" role="form" ng-submit="saveItem(item)">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" ng-model="item.name" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="pull-left">
+                            <crud-Buttons></crud-Buttons>
+                        </div>
+                        <div class="pull-right" ng-show="item.id">
+                            <div class="pull-left">
+                                <button type="button" class="btn btn-danger btn-sm" ng-click="clearAll()">Reset Permissions</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <hr/>
+        </div>
+    </div>
+    <tabset ng-show="item.id">
+        <tab heading="Permissions">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="col-md-3">Permission Name</th>
+                            <th class="col-md-9">Have Access</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="name in names">
+                            <td>{{$index+1}}</td>
+                            <td>
+                                <a href="#" data-toggle="modal" data-target="#editMembersDialog" ng-click="editMembers($index)">{{name.meta.friendName}}</a>
+                            </td>
+                            <td>
+                                <span ng-repeat="i in name.items">{{parsePermissionSchemeItem(i)}} / </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </tab>
+        <tab heading="Related Projects">
+            <div class="row scroll-when-needed">
+                <div class="col-lg-12">
+                    <table class="table table-striped table-bordered">
+                        <tbody>
+                            <tr ng-repeat="p in projects">
+                                <td><a ng-href="{{resolveUrl(p)}}">{{p.name}}</a> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </tab>
+
+        <tab heading="Test Permissions">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form class="form-horizontal" ng-submit="testPermissions()">
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Project</label>
+                            <div class="col-lg-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon" data-target="#projectSelectDialog" data-toggle="modal" >
+                                        <i class="fa fa-pencil"></i>
+                                    </span>
+                                    <a class="form-control" ng-href="{{resolveUrl(test.project)}}"> {{test.project.pkey}} - {{test.project.name}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">User</label>
+                            <div class="col-lg-10">
+                                <div class="input-group">
+                                <span class="input-group-addon" data-target="#userSelectDialog" data-toggle="modal" >
+                                    <i class="fa fa-pencil"></i>
+                                </span>
+                                    <a class="form-control" ng-href="{{resolveUrl(test.user)}}"> {{test.user.name}} {{test.user.lastName}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-left">
+                            <button type="submit" class="btn btn-info btn-sm" ng-disabled="!test.project || !test.user">Test</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-1">#</th>
+                                <th class="col-sm-3">Permission</th>
+                                <th class="col-sm-2">Have Access</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="p in testPermissionItems">
+                                <td>{{$index+1}}</td>
+                                <td>{{p.name}}</td>
+                                <td class="text-center"><i ng-show="p.exists" class="fa fa-check"></i> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </tab>
+    </tabset>
+
+</div>
+
+<div class="modal fade" id="editMembersDialog">
+    <div class="modal-dialog large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Gestionar Permisos: {{selected.meta.friendName}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <tabset>
+                            <tab heading="Grupos">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="list-group scroll-when-needed">
+                                            <a href="#" class="list-group-item active">Available Groups</a>
+                                            <a ng-repeat="u in meta.group.unselected" ng-click="addItem(u)" class="list-group-item animation">
+                                                <span>{{u.name}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="list-group scroll-when-needed">
+                                            <a href="#" class="list-group-item active">Assigned Groups</a>
+                                            <a ng-repeat="u in meta.group.selected" ng-click="removeItem(u)" class="list-group-item animation">
+                                                <span>{{u.name}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                            <tab heading="Usuarios">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="list-group scroll-when-needed">
+                                            <a href="#" class="list-group-item active">Available Users</a>
+                                            <a ng-repeat="u in meta.user.unselected" ng-click="addItem(u)" class="list-group-item animation">
+                                                <span>{{u.name}} {{u.lastName}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="list-group scroll-when-needed">
+                                            <a href="#" class="list-group-item active">Assigned Users</a>
+                                            <a ng-repeat="u in meta.user.selected" ng-click="removeItem(u)" class="list-group-item animation">
+                                                <span>{{u.name}} {{u.lastName}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                            <tab heading="Roles">
+                                <h5>The role assignment only works with projects</h5>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="list-group scroll-when-needed">
+                                            <a href="#" class="list-group-item active">Available Roles</a>
+                                            <a ng-repeat="u in meta.role.unselected" ng-click="addItem(u)" class="list-group-item animation">
+                                                <span>{{u.name}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="list-group scroll-when-needed">
+                                            <a href="#" class="list-group-item active">Assigned Roles</a>
+                                            <a ng-repeat="u in meta.role.selected" ng-click="removeItem(u)" class="list-group-item animation">
+                                                <span>{{u.name}}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-primary" data-dismiss="modal" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="projectSelectDialog" class="modal fade">
+    <div class="modal-dialog large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Select a Project</h5>
+            </div>
+            <div class="modal-body">
+                <erp-grid config="gridProject" params="gridProjectParams"></erp-grid>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Close</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="userSelectDialog" class="modal fade">
+    <div class="modal-dialog large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Select an user</h5>
+            </div>
+            <div class="modal-body">
+                <erp-grid config="gridUser" params="gridUserParams"></erp-grid>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Close</span></button>
+            </div>
+        </div>
+    </div>
+</div>

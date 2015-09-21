@@ -1,0 +1,379 @@
+<div ng-show="isLoggedIn()">
+
+    <div ng-show="!isSystemAdministrator()">
+        <h4>Assigned to me</h4>
+        <div class="row">
+            <div class="col-lg-4">
+                <div>
+                    <div class="thumbnail">
+                        <div class="alert alert-success">
+                            <a ng-href="{{browseProjects}}">
+                                <h4>
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <span> By Project</span>
+                                </h4>
+                            </a>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.my.assignee.project" ng-click="browseProject(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="success" value="contribution(i,meta.my.assignee.project)">
+                                    {{contribution(i,meta.my.assignee.project) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4">
+                <div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-info">
+                            <h4>
+                                <i class="fa fa-area-chart"></i>
+                                <span> By Status</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.my.assignee.status" ng-click="browseIssues(i,true,'assignee')">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="info" value="contribution(i,meta.my.assignee.status)">
+                                    {{contribution(i,meta.my.assignee.status) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-danger">
+                            <h4>
+                                <i class="fa fa-exclamation-circle"></i>
+                                <span> By Priority</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.my.assignee.priority" ng-click="browseIssues(i,true,'assignee')">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="danger" value="contribution(i,meta.my.assignee.priority)">
+                                    {{contribution(i,meta.my.assignee.priority) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="thumbnail">
+                    <div class="alert alert-warning">
+                        <h4>
+                            <i class="fa fa-calendar"></i>
+                            <span> By Due Date</span>
+                        </h4>
+                    </div>
+                    <div class="row" ng-repeat="i in meta.my.assignee.dueDate" ng-click="browseIssues(i,true,'assignee')">
+                        <div class="col-lg-7">
+                            {{i.name}}
+                        </div>
+                        <div class="col-lg-1">
+                            <span class="pull-right">{{i.rowCount}}</span>
+                        </div>
+                        <div class="col-lg-4">
+                            <progressbar class="condensed" type="warning" value="contribution(i,meta.my.assignee.dueDate)">
+                                {{contribution(i,meta.my.assignee.dueDate) | round}}%
+                            </progressbar>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <hr/>
+
+        <h4>Reported by me</h4>
+        <div class="row">
+            <div class="col-lg-4">
+                <div>
+                    <div class="thumbnail">
+                        <div class="alert alert-success">
+                            <a ng-href="{{browseProjects}}">
+                                <h4>
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <span> By Project</span>
+                                </h4>
+                            </a>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.my.reporter.project" ng-click="browseProject(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="success" value="contribution(i,meta.my.reporter.project)">
+                                    {{contribution(i,meta.my.reporter.project) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4">
+                <div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-info">
+                            <h4>
+                                <i class="fa fa-area-chart"></i>
+                                <span> By Status</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.my.reporter.status" ng-click="browseIssues(i,true)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="info" value="contribution(i,meta.my.reporter.status)">
+                                    {{contribution(i,meta.my.reporter.status) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-danger">
+                            <h4>
+                                <i class="fa fa-exclamation-circle"></i>
+                                <span> By Priority</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.my.reporter.priority" ng-click="browseIssues(i,true)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="danger" value="contribution(i,meta.my.reporter.priority)">
+                                    {{contribution(i,meta.my.reporter.priority) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="thumbnail">
+                    <div class="alert alert-warning">
+                        <h4>
+                            <i class="fa fa-calendar"></i>
+                            <span> By Due Date</span>
+                        </h4>
+                    </div>
+                    <div class="row" ng-repeat="i in meta.my.reporter.dueDate" ng-click="browseIssues(i,true)">
+                        <div class="col-lg-7">
+                            {{i.name}}
+                        </div>
+                        <div class="col-lg-1">
+                            <span class="pull-right">{{i.rowCount}}</span>
+                        </div>
+                        <div class="col-lg-4">
+                            <progressbar class="condensed" type="warning" value="contribution(i,meta.my.reporter.dueDate)">
+                                {{contribution(i,meta.my.reporter.dueDate) | round}}%
+                            </progressbar>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div ng-show="isSystemAdministrator()">
+        <h4>Not Resolved</h4>
+        <div class="row">
+            <div class="col-lg-4">
+                <div>
+                    <div class="thumbnail">
+                        <div class="alert alert-success">
+                            <a ng-href="{{browseProjects}}">
+                            <h4>
+                                <i class="fa fa-bar-chart-o"></i>
+                                <span> By Project</span>
+                            </h4>
+                            </a>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.all.project" ng-click="browseProject(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="success" value="contribution(i,meta.all.project)">
+                                    {{contribution(i,meta.all.project) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-warning">
+                            <h4>
+                                <i class="fa fa-calendar"></i>
+                                <span> By Due Date</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.all.dueDate" ng-click="browseIssues(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="warning" value="contribution(i,meta.all.dueDate)">
+                                    {{contribution(i,meta.all.dueDate) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4">
+                <div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-info">
+                            <h4>
+                                <i class="fa fa-area-chart"></i>
+                                <span> By Status</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.all.status" ng-click="browseIssues(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="info" value="contribution(i,meta.all.status)">
+                                    {{contribution(i,meta.all.status) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-danger">
+                            <h4>
+                                <i class="fa fa-exclamation-circle"></i>
+                                <span> By Priority</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.all.priority" ng-click="browseIssues(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="danger" value="contribution(i,meta.all.priority)">
+                                    {{contribution(i,meta.all.priority) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-warning">
+                            <h4>
+                                <i class="fa fa-user"></i>
+                                <span> By Assignee</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.all.assignee" ng-click="browseIssues(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="warning" value="contribution(i,meta.all.assignee)">
+                                    {{contribution(i,meta.all.assignee) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="thumbnail">
+                        <div class="alert alert-info">
+                            <h4>
+                                <i class="fa fa-user"></i>
+                                <span> By Reporter</span>
+                            </h4>
+                        </div>
+                        <div class="row" ng-repeat="i in meta.all.reporter" ng-click="browseIssues(i)">
+                            <div class="col-lg-7">
+                                {{i.name}}
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="pull-right">{{i.rowCount}}</span>
+                            </div>
+                            <div class="col-lg-4">
+                                <progressbar class="condensed" type="info" value="contribution(i,meta.all.reporter)">
+                                    {{contribution(i,meta.all.reporter) | round}}%
+                                </progressbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

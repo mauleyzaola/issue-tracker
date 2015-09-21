@@ -1,0 +1,207 @@
+<div>
+    <form ng-submit="saveItem(item)" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Nombre</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="item.name" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="pull-right">
+            <button class="btn btn-sm btn-info" ng-show="item.id" type="button" ng-click="testWorkflow()" >Probar Workflow</button>
+        </div>
+        <div class="pull-left">
+            <crud-Buttons></crud-Buttons>
+        </div>
+    </form>
+</div>
+
+<div ng-show="item.id">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-left">
+                <p ng-show="currentStatus">
+                    <span class="small">{{currentStatus.name}}: {{currentStatus.description}}</span>
+                </p>
+                <button class="btn btn-sm btn-warning" type="button" ng-repeat="s in testStatuses" ng-click="testWorkflow(s.nextStatus)" title="{{s.nextStatus.description}}" >
+                    {{s.name}}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+        <tr>
+            <th>Paso</th>
+            <th>Estado Anterior</th>
+            <th>Estado Siguiente</th>
+            <th>Resuelve Tarea</th>
+            <th>Cancela Tarea</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="s in steps" ng-click="editStep(s)">
+            <td>{{s.name}}</td>
+            <td>{{s.prevStatus.name}}</td>
+            <td>{{s.nextStatus.name}}</td>
+            <td>{{s.resolves | boolToText}}</td>
+            <td>{{s.cancels | boolToText}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-sm btn-info" ng-click="addStep()">
+        <i class="fa fa-plus"></i>
+        <span> Agregar Paso</span>
+    </button>
+
+    <hr/>
+
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Estado</th>
+                <th>Descripcion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="s in statuses" ng-click="editStatus(s)">
+                <td>{{s.name}}</td>
+                <td>{{s.description}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-sm btn-info" ng-click="addStatus()">
+        <i class="fa fa-plus"></i>
+        <span> Agregar Estado</span>
+    </button>
+</div>
+
+<div id="statusDialog" class="modal fade">
+    <div class="modal-dialog large">
+        <div class="modal-content">
+            <form ng-submit="saveStatus(selectedStatus)" class="form-horizontal">
+                <div class="modal-header">
+                    <h4>Editar Status - {{selectedStatus.name}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-lg-2">Nombre</label>
+                        <div class="col-lg-6">
+                            <input type="text" ng-model="selectedStatus.name" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2">Descripcion</label>
+                        <div class="col-lg-6">
+                            <input type="text" ng-model="selectedStatus.description" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-xs btn-success"><span> Guardar</span></button>
+                    <button type="button" ng-click="removeStatus(selectedStatus)" ng-show="selectedStatus.id" class="btn btn-xs btn-danger"><span> Eliminar</span></button>
+                    <button type="button" data-dismiss="modal" class="btn btn-xs btn-primary"><span> Cerrar</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="stepDialog" class="modal fade">
+    <div class="modal-dialog large">
+        <div class="modal-content">
+            <form ng-submit="saveStep(selectedStep)" class="form-horizontal">
+                <div class="modal-header">
+                    <h4>Editar Paso - {{selectedStep.name}}</h4>
+                </div>
+                <div class="modal-body">
+                    <tabset>
+                        <tab heading="Paso">
+                            <div class="form-group">
+                                <label class="col-lg-2">Nombre</label>
+                                <div class="col-lg-6">
+                                    <input type="text" ng-model="selectedStep.name" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2">Estado Anterior</label>
+                                <div class="col-lg-8">
+                                    <select ng-model="selectedStep.prevStatus.id" ng-options="i.id as i.name for i in statuses" class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2">Estado Siguiente</label>
+                                <div class="col-lg-8">
+                                    <select ng-model="selectedStep.nextStatus.id" ng-options="i.id as i.name for i in statuses" class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" ng-model="selectedStep.resolves" />
+                                    Resuelve Tarea
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <input type="checkbox" ng-model="selectedStep.cancels" />
+                                    Cancela Tarea
+                                </label>
+                            </div>
+                        </tab>
+                        <tab heading="Grupos">
+                            <h5>Seleccionar los grupos que pueden ejecutar este paso</h5>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="list-group scroll-when-needed">
+                                        <a href="#" class="list-group-item active">Grupos Disponibles</a>
+                                        <a ng-repeat="u in meta.group.unselected" ng-click="addMember(u)" class="list-group-item animation">
+                                            <span>{{u.name}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="list-group scroll-when-needed">
+                                        <a href="#" class="list-group-item active">Grupos Asignados</a>
+                                        <a ng-repeat="u in meta.group.selected" ng-click="removeMember(u)" class="list-group-item animation">
+                                            <span>{{u.name}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
+                        <tab heading="Usuarios">
+                            <h5>Seleccionar los usuarios que pueden ejecutar este paso</h5>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="list-group scroll-when-needed">
+                                        <a href="#" class="list-group-item active">Usuarios Disponibles</a>
+                                        <a ng-repeat="u in meta.user.unselected" ng-click="addMember(u)" class="list-group-item animation">
+                                            <span>{{u.name}} {{u.lastName}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="list-group scroll-when-needed">
+                                        <a href="#" class="list-group-item active">Usuarios Asignados</a>
+                                        <a ng-repeat="u in meta.user.selected" ng-click="removeMember(u)" class="list-group-item animation">
+                                            <span>{{u.name}} {{u.lastName}}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-sm btn-success">Guardar</span></button>
+                    <button type="button" ng-click="removeStep(selectedStep)" ng-show="selectedStep.id" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-primary">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

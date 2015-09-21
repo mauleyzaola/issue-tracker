@@ -1,0 +1,12 @@
+# webstorm configuration files
+.idea/
+
+#MACOS
+.DS_Store
+
+# output from application
+config.json
+#*.log
+dbconf.yml
+
+*.exe

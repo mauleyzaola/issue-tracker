@@ -1,0 +1,88 @@
+<div class="row">
+    <div class="pull-left">
+        <a ng-href="{{newItem()}}" class="btn btn-primary btn-sm">Nueva Tarea</a>
+    </div>
+</div>
+<div class="row">
+    <ul class="list-fill">
+        <li class="list-fill-item" ng-repeat="i in items" >
+            <div class="thumbnail scroll-when-needed">
+                <div class="alert" ng-class="hasDocumentRelated(i)">
+                    <a ng-href="{{resolveUrl(i.item)}}">
+                        <h5 ng-class="{completed:i.item.resolvedDate}">({{i.item.pkey}}) {{i.item.name}}</h5>
+                    </a>
+                </div>
+                <div class="panel-body fill-top">
+                    <p>
+                        <i class="fa fa-calendar"></i>
+                        <span class="small">{{i.item.dateCreated | dateFormat}}</span>
+                        <span>&nbsp</span>
+                        <i class="fa fa-calendar-o"></i>
+                        <span class="small">{{i.item.dueDate | dateFormat}}</span>
+                        <span>&nbsp</span>
+                        <i class="fa" ng-class="getPriorityClass(i.item)"></i>
+                        <span class="small">Prioridad: {{i.item.priority.name}}</span>
+                    </p>
+                    <p>
+                        <i class="fa fa-user" ></i>
+                        <span class="small" ng-show="!i.item.assignee.name">Sin asignar</span>
+                        <span class="small">{{i.item.assignee.name}} {{i.item.assignee.lastName}}</span>
+                        <span>&nbsp</span>
+                        <i class="fa fa-user"></i>
+                        <span class="small">{{i.item.reporter.name}} {{i.item.reporter.lastName}}</span>
+                    </p>
+                    <p>
+                        <i class="fa fa-signal"></i>
+                        <span class="small">{{i.item.status.name}}</span>
+                        <span>&nbsp</span>
+                        <i class="fa fa-newspaper-o" ></i>
+                        <span class="small" title="{{i.item.description}}" >{{i.item.description | trunc:40}}</span>
+                    </p>
+                    <div ng-show="i.documentRelated">
+                        <p>
+                            <i class="fa fa-truck"></i>
+                            <span class="small">{{i.documentRelated.businessPartner.name}}</span>
+                        </p>
+                        <p><span class="small" title="{{i.documentRelated.text}}">{{i.documentRelated.text | trunc:40}}</span></p>
+                    </div>
+                </div>
+                <div class="panel-body fill-top">
+                    <div ng-repeat="c in i.children">
+                        <a ng-href="{{resolveUrl(c)}}">
+                            <h5 ng-class="{completed:c.resolvedDate}">({{c.pkey}}) {{c.name}}</h5>
+                        </a>
+                        <p>
+                            <i class="fa fa-calendar"></i>
+                            <span class="small">{{c.dateCreated | dateFormat}}</span>
+                            <span>&nbsp</span>
+                            <i class="fa fa-calendar-o"></i>
+                            <span class="small">{{c.dueDate | dateFormat}}</span>
+                            <span>&nbsp</span>
+                            <i class="fa" ng-class="getPriorityClass(c)"></i>
+                            <span class="small">Prioridad: {{c.priority.name}}</span>
+                        </p>
+                        <p>
+                            <i class="fa fa-user" ></i>
+                            <span class="small" ng-show="!c.assignee.name">Sin asignar</span>
+                            <span class="small">{{c.assignee.name}} {{c.assignee.lastName}}</span>
+                            <span>&nbsp</span>
+                            <i class="fa fa-user"></i>
+                            <span class="small">{{c.reporter.name}} {{c.reporter.lastName}}</span>
+                        </p>
+                        <p>
+                            <i class="fa fa-signal"></i>
+                            <span class="small">{{c.status.name}}</span>
+                            <span>&nbsp</span>
+                            <i class="fa fa-newspaper-o" ></i>
+                            <span class="small" title="{{c.description}}" >{{c.description | trunc:40}}</span>
+                        </p>
+                        <div ng-show="c.documentRelated">
+                            <p><span class="small" title="{{c.documentRelated.text}}">{{c.documentRelated.text | trunc:40}}</span></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

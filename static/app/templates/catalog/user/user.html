@@ -1,0 +1,139 @@
+<div>
+    <tabset>
+        <tab heading="{{item.name}} {{item.lastName}}">
+            <form class="form-horizontal" role="form" ng-submit="saveItem(item)">
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" ng-model="item.name" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Last Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" ng-model="item.lastName" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" ng-model="item.email" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="item.isSystemAdministrator" > Is System Administrator
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="item.isActive" > Can Login
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="item.metaData.notifications.email" > Email Notifications
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="item.metaData.notifications.recieveOwnChanges" > Notify its own changes
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="pull-left">
+                        <crud-Buttons></crud-Buttons>
+                    </div>
+                    <div class="pull-right">
+                        <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#changePasswordDialog" ng-show="item.id">
+                            <i class="fa fa-lock"></i>
+                            <span> Change Password</span>
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </tab>
+
+
+        <tab heading="Groups" ng-show="item.id">
+            <div class="col-lg-6">
+                <div class="list-group"><a href="#" class="list-group-item active">Available Groups</a><a ng-repeat="u in groups.unselected" ng-click="addGroup($index)" class="list-group-item animation"><span>{{u.name}}</span></a></div>
+            </div>
+            <div class="col-lg-6">
+                <div class="list-group"><a href="#" class="list-group-item active">Assigned Groups</a><a ng-repeat="u in groups.selected" ng-click="removeGroup($index)" class="list-group-item animation"><span>{{u.name}}</span></a></div>
+            </div>
+        </tab>
+
+        <tab heading="Issues" ng-show="item.id">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h5>Assigned Issues</h5>
+                    <erp-grid config="gridAssignee" params="gridAssigneeParams"></erp-grid>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h5>Reported Issues</h5>
+                    <erp-grid config="gridReporter" params="gridReporterParams"></erp-grid>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+</div>
+
+
+<div class="modal fade" id="changePasswordDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" ng-submit="changePassword()">
+                <div class="modal-header">
+                    <h4>Change Password</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-lg-6">New Password</label>
+                        <div class="col-lg-4">
+                            <input type="password" ng-model="item.password1" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-6">Confirm New Password</label>
+                        <div class="col-lg-4">
+                            <input type="password" ng-model="item.password2" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-xs btn-success" type="submit" ng-disabled="!enableChangePassword()">Change</button>
+                    <button class="btn btn-xs btn-primary" type="button" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
