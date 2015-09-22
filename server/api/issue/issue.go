@@ -18,7 +18,7 @@ func (t *Api) status(c web.C, w http.ResponseWriter, r *http.Request) {
 		t.base.ErrorResponse(tx, err, w)
 		return
 	}
-	issue := &domain.Issue{Id: t.base.ParamValue("id", c, r)}
+	issue := &domain.Issue{Id: t.base.ParamValue("id", c, r), Pkey: t.base.ParamValue("pkey", c, r)}
 	status := &domain.Status{Id: t.base.ParamValue("status", c, r)}
 	err = t.base.Database.IssueDb.StatusChange(tx, issue, status, nil)
 	t.base.Response(tx, err, w, nil)

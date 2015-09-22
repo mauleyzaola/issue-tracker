@@ -76,7 +76,7 @@ angular.module("TrackerApp.ApiPath.services", [])
                 assignToMe:function(data){ return PathResolver.baseApiAuthPath + "/issue/assigntome?" + utils.queryStringFromObject(data); },
                 reporterIsMe:function(data){ return PathResolver.baseApiAuthPath + "/issue/reporterisme?" + utils.queryStringFromObject(data); },
 
-                changeStatus: function(data){ return PathResolver.baseApiAuthPath + "/issue/" + data.pkey + "/status?" + QueryStringNames.status + "=" + data.status; },
+                changeStatus: function(data){ return PathResolver.baseApiAuthPath + "/issue/status?" + utils.queryStringFromObject(data); },
 
                 commentAdd:function(data){ return PathResolver.baseApiAuthPath + "/issue/" + data.issue.id + "/comment" },
                 commentUpdate: function(data){ return PathResolver.baseApiAuthPath + "/issue/" + data.issue.id + "/comment" },

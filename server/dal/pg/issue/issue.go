@@ -77,6 +77,7 @@ func (t *IssueDb) SetUserDb(item *database.User) {
 }
 
 func (t *IssueDb) StatusChange(tx interface{}, issue *domain.Issue, status *domain.Status, fn database.IssueStatusFn) error {
+	t.Base.SqlTraceOn()
 	issue, err := t.Load(tx, issue.Id, issue.Pkey)
 	if err != nil {
 		return err
@@ -129,7 +130,8 @@ func (t *IssueDb) StatusChange(tx interface{}, issue *domain.Issue, status *doma
 	}
 
 	issue.IdStatus = status.Id
-	_, err = t.Base.Executor(tx).Update(issue)
+	issue.Status = status
+	err = t.Update(tx, issue)
 	if err != nil {
 		return err
 	}
@@ -138,7 +140,7 @@ func (t *IssueDb) StatusChange(tx interface{}, issue *domain.Issue, status *doma
 			return err
 		}
 	}
-
+	t.Base.SqlTraceOff()
 	//TODO: generate notifications to subscribers
 	return nil
 }
