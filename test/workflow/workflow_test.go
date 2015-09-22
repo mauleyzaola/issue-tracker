@@ -16,13 +16,13 @@ func TestCrud(t *testing.T) {
 		item := mock.Workflow()
 
 		t.Log("Create new workflow")
-		err := mock.WorkflowCreate(tx, app.Db, item)
+		err := mock.WorkflowCreate(app.Db, tx, item)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, item.Id)
 
 		t.Log("Create a second workflow with same name to force error")
 		item2 := &domain.Workflow{Name: item.Name}
-		err = mock.WorkflowCreate(tx, app.Db, item2)
+		err = mock.WorkflowCreate(app.Db, tx, item2)
 
 		assert.NotNil(t, err)
 		t.Log(err)
@@ -32,7 +32,7 @@ func TestCrud(t *testing.T) {
 		assert.NotNil(t, tx)
 
 		t.Log("Update original item, reload and compare changes")
-		err = mock.WorkflowCreate(tx, app.Db, item)
+		err = mock.WorkflowCreate(app.Db, tx, item)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, item.Id)
 
@@ -66,7 +66,7 @@ func TestWorkflowStep(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("Given a set of workflow/workflow step, perform basic crud operations")
 		workflow := mock.Workflow()
-		err := mock.WorkflowCreate(tx, app.Db, workflow)
+		err := mock.WorkflowCreate(app.Db, tx, workflow)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, workflow.Id)
 

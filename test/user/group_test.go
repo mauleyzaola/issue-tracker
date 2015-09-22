@@ -18,7 +18,7 @@ func TestGroupCrud(t *testing.T) {
 
 		t.Log("Create new group")
 		group := mock.Group()
-		err := mock.GroupCreate(tx, app.Db, group)
+		err := mock.GroupCreate(app.Db, tx, group)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, group.Id)
 		assert.Equal(t, group.DateCreated.Year(), time.Now().Year())
@@ -58,7 +58,7 @@ func TestGroupMembers(t *testing.T) {
 
 		t.Log("Create a new group")
 		group := mock.Group()
-		err := mock.GroupCreate(tx, app.Db, group)
+		err := mock.GroupCreate(app.Db, tx, group)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, group.Id)
 		assert.NotNil(t, group.Meta)
@@ -69,10 +69,10 @@ func TestGroupMembers(t *testing.T) {
 		user1.Name = "User1"
 		user2 := mock.User()
 		user2.Name = "User2"
-		err = mock.UserCreate(tx, app.Db, user1)
+		err = mock.UserCreate(app.Db, tx, user1)
 		assert.Nil(t, err)
 		assert.NotNil(t, user1.Id)
-		err = mock.UserCreate(tx, app.Db, user2)
+		err = mock.UserCreate(app.Db, tx, user2)
 		assert.Nil(t, err)
 		assert.NotNil(t, user2.Id)
 

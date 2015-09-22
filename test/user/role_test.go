@@ -16,7 +16,7 @@ func TestRoleCrud(t *testing.T) {
 
 		t.Log("Create it on database")
 		role := mock.Role()
-		err := mock.RoleCreate(tx, app.Db, role)
+		err := mock.RoleCreate(app.Db, tx, role)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, role.Id)
 		assert.NotNil(t, role.Meta)
@@ -65,7 +65,7 @@ func TestRoleList(t *testing.T) {
 		t.Log("Create the list and get the number")
 		for i := 0; i < 10; i++ {
 			newRole := mock.Role()
-			err = mock.RoleCreate(tx, app.Db, newRole)
+			err = mock.RoleCreate(app.Db, tx, newRole)
 			assert.Nil(t, err)
 			assert.NotEmpty(t, newRole.Id)
 		}

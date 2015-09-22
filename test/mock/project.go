@@ -16,6 +16,6 @@ func Project(sequence int) *domain.Project {
 	return item
 }
 
-func ProjectCreate(tx interface{}, op *database.DbOperations, item *domain.Project) error {
+func ProjectCreate(op *database.DbOperations, tx interface{}, item *domain.Project) error {
 	return op.ProjectDb.Create(tx, item)
 }

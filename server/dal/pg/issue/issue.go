@@ -132,14 +132,13 @@ func (t *IssueDb) Create(tx interface{}, item *domain.Issue, parent string) erro
 		item.Pkey = fmt.Sprintf(operations.ISSUE_NO_PROJECT_MASK, next)
 	}
 
-	//calcular el primer status que se puede asignar a este issue segun el workflow
 	statuses, err := t.StatusDb().WorkflowStepAvailableStatus(tx, item.Workflow, nil)
 	if err != nil {
 		return err
 	}
 
 	if len(statuses) != 1 {
-		return errors.New("No se encuentra el primer estado para el workflow seleccionado")
+		return fmt.Errorf("cannot find the first status for the given workflow")
 	}
 
 	item.IdStatus = statuses[0].NextStatus.Id
@@ -245,12 +244,7 @@ func (t *IssueDb) Remove(tx interface{}, id string) (*domain.Issue, error) {
 
 	children, err := t.Base.Executor(tx).SelectInt("select count(*) from issue where idparent=$1", item.Id)
 	if children != 0 {
-		return nil, errors.New(fmt.Sprintf("No se puede eliminar la tarea porque hay otras %d subtareas que dependen de ella", children))
-	}
-
-	children, err = t.Base.Executor(tx).SelectInt("select count(*) from issue_relation where idissue=$1", item.Id)
-	if children != 0 {
-		return nil, errors.New("No se puede eliminar la tarea porque hay otro proceso dependiente de ella")
+		return nil, fmt.Errorf("cannot remove the issue because there are %s subtasks", children)
 	}
 
 	query := "delete from issue_subscription where idissue=$1"
@@ -259,19 +253,16 @@ func (t *IssueDb) Remove(tx interface{}, id string) (*domain.Issue, error) {
 		return nil, err
 	}
 
-	//eliminar los comentarios
 	err = t.CommentRemoveAll(tx, item)
 	if err != nil {
 		return nil, err
 	}
 
-	//eliminar los attachments
 	err = t.AttachmentRemoveAll(tx, item)
 	if err != nil {
 		return nil, err
 	}
 
-	//eliminar la tarea
 	_, err = t.Base.Executor(tx).Delete(item)
 	if err != nil {
 		return nil, err
@@ -317,7 +308,7 @@ func (t *IssueDb) Update(tx interface{}, item *domain.Issue) error {
 	}
 
 	if !oldItem.AcceptUpdates() {
-		return errors.New("No se puede actualizar una tarea resuelta")
+		return fmt.Errorf("cannot update a resolved issue")
 	}
 
 	//validar permisos sobre esta accion
@@ -362,7 +353,6 @@ func (t *IssueDb) Update(tx interface{}, item *domain.Issue) error {
 		return err
 	}
 
-	//generar suscripciones automaticamente si ha cambiado el assignee o el reporter
 	if item.Assignee != nil && len(item.Assignee.Id) != 0 && (oldItem.Assignee == nil || oldItem.Assignee.Id != item.Assignee.Id) {
 		err = t.SubscriptionAdd(tx, item, item.Assignee)
 		if err != nil {
@@ -395,7 +385,7 @@ func (t *IssueDb) Children(tx interface{}, issue *domain.Issue) ([]database.Issu
 
 func (t *IssueDb) MoveProject(tx interface{}, issue *domain.Issue, target *domain.Project) error {
 	if target == nil || len(target.Id) == 0 {
-		return errors.New("No has seleccionado ningun proyecto valido para esta operacion")
+		return fmt.Errorf("missing project")
 	}
 
 	oldIssue, err := t.Load(tx, issue.Id, "")
@@ -408,13 +398,12 @@ func (t *IssueDb) MoveProject(tx interface{}, issue *domain.Issue, target *domai
 	}
 
 	if issue.Project != nil && oldIssue.Project != nil && oldIssue.Project.Id == target.Id {
-		return errors.New("La tarea ya pertenece a este projecto, no hay nada que hacer.")
+		return fmt.Errorf("the issue already belongs to this project, there is nothing to do")
 	}
 
 	target = oldProject
 	issue = oldIssue
 
-	//validar el permiso sobre el proyecto anterior
 	permission := &domain.PermissionName{}
 	permission.Name = domain.PERMISSION_DELETE_ISSUE
 	ok, err := t.PermissionDb().AllowedUser(tx, t.Base.CurrentSession().User, issue, permission)
@@ -430,7 +419,6 @@ func (t *IssueDb) MoveProject(tx interface{}, issue *domain.Issue, target *domai
 	issue.Project = target
 	issue.IdProject.Valid = false
 
-	//validar el permiso sobre el proyecto nuevo
 	permission.Name = domain.PERMISSION_CREATE_ISSUE
 	ok, err = t.PermissionDb().AllowedUser(tx, t.Base.CurrentSession().User, issue, permission)
 	if !ok {

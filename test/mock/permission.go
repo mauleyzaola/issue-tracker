@@ -12,7 +12,7 @@ func PermissionScheme() *domain.PermissionScheme {
 	return item
 }
 
-func PermissionSchemeCreate(tx interface{}, op *database.DbOperations, item *domain.PermissionScheme) error {
+func PermissionSchemeCreate(op *database.DbOperations, tx interface{}, item *domain.PermissionScheme) error {
 	return op.PermissionDb.Create(tx, item)
 }
 
@@ -23,11 +23,11 @@ func PermissionSchemeItem() *domain.PermissionSchemeItem {
 	return item
 }
 
-func PermissionSchemeItemCreate(tx interface{}, op *database.DbOperations, item *domain.PermissionSchemeItem) error {
+func PermissionSchemeItemCreate(op *database.DbOperations, tx interface{}, item *domain.PermissionSchemeItem) error {
 	var err error
 	if item.PermissionScheme == nil {
 		item.PermissionScheme = PermissionScheme()
-		err = PermissionSchemeCreate(tx, op, item.PermissionScheme)
+		err = PermissionSchemeCreate(op, tx, item.PermissionScheme)
 		if err != nil {
 			return err
 		}

@@ -14,7 +14,7 @@ import (
 func TestProjectRole(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("create a new project")
-		session, err := mock.SessionSetContext(tx, app.Db, true)
+		session, err := mock.SessionSetContext(app.Db, tx, true)
 		assert.Nil(t, err)
 		assert.NotNil(t, session)
 
@@ -30,11 +30,11 @@ func TestProjectRole(t *testing.T) {
 		role := mock.Role()
 		user := mock.User()
 		group := mock.Group()
-		err = mock.RoleCreate(tx, app.Db, role)
+		err = mock.RoleCreate(app.Db, tx, role)
 		assert.Nil(t, err)
-		err = mock.UserCreate(tx, app.Db, user)
+		err = mock.UserCreate(app.Db, tx, user)
 		assert.Nil(t, err)
-		err = mock.GroupCreate(tx, app.Db, group)
+		err = mock.GroupCreate(app.Db, tx, group)
 		assert.Nil(t, err)
 
 		t.Log("meta should load all objects")

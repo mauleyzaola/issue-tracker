@@ -76,16 +76,16 @@ func TestPermissionSchemeProject(t *testing.T) {
 		t.Log("Given a new permission scheme")
 		admin := mock.User()
 		admin.IsSystemAdministrator = true
-		err := mock.UserCreate(tx, app.Db, admin)
+		err := mock.UserCreate(app.Db, tx, admin)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, admin.Id)
-		session, err := mock.SessionCreate(tx, app.Db, admin)
+		session, err := mock.SessionCreate(app.Db, tx, admin)
 		assert.Nil(t, err)
 		assert.NotNil(t, session)
 		app.Db.Db.SetCurrentSession(session)
 
 		scheme := mock.PermissionScheme()
-		err = mock.PermissionSchemeCreate(tx, app.Db, scheme)
+		err = mock.PermissionSchemeCreate(app.Db, tx, scheme)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, scheme.Id)
 
@@ -99,7 +99,7 @@ func TestPermissionSchemeProject(t *testing.T) {
 		for i := 0; i < counter; i++ {
 			project := mock.Project(i)
 			project.PermissionScheme = scheme
-			err = mock.ProjectCreate(tx, app.Db, project)
+			err = mock.ProjectCreate(app.Db, tx, project)
 			assert.Nil(t, err)
 		}
 

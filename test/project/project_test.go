@@ -14,7 +14,7 @@ import (
 func TestProjectCrud(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("create a new project")
-		session, err := mock.SessionSetContext(tx, app.Db, true)
+		session, err := mock.SessionSetContext(app.Db, tx, true)
 		assert.Nil(t, err)
 		assert.NotNil(t, session)
 
@@ -60,19 +60,19 @@ func TestProjectCrud(t *testing.T) {
 func TestProjectDups(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("create a new project")
-		session, err := mock.SessionSetContext(tx, app.Db, true)
+		session, err := mock.SessionSetContext(app.Db, tx, true)
 		assert.Nil(t, err)
 		assert.NotNil(t, session)
 
 		item := mock.Project(1)
-		err = mock.ProjectCreate(tx, app.Db, item)
+		err = mock.ProjectCreate(app.Db, tx, item)
 		assert.Nil(t, err)
 		assert.NotNil(t, item)
 		assert.NotEmpty(t, item.Id)
 
 		item2 := mock.Project(2)
 		item2.Name = strings.ToUpper(item.Name)
-		err = mock.ProjectCreate(tx, app.Db, item2)
+		err = mock.ProjectCreate(app.Db, tx, item2)
 		if assert.NotNil(t, err) {
 			t.Log(err)
 		}
@@ -82,19 +82,19 @@ func TestProjectDups(t *testing.T) {
 func TestProjectDups2(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("create a new project")
-		session, err := mock.SessionSetContext(tx, app.Db, true)
+		session, err := mock.SessionSetContext(app.Db, tx, true)
 		assert.Nil(t, err)
 		assert.NotNil(t, session)
 
 		item := mock.Project(1)
-		err = mock.ProjectCreate(tx, app.Db, item)
+		err = mock.ProjectCreate(app.Db, tx, item)
 		assert.Nil(t, err)
 		assert.NotNil(t, item)
 		assert.NotEmpty(t, item.Id)
 
 		t.Log("create a second project")
 		item2 := mock.Project(2)
-		err = mock.ProjectCreate(tx, app.Db, item2)
+		err = mock.ProjectCreate(app.Db, tx, item2)
 		assert.Nil(t, err)
 		assert.NotNil(t, item2)
 
