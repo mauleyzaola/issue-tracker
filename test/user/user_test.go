@@ -44,7 +44,7 @@ func TestUserCrud(t *testing.T) {
 		user := mock.User()
 		user.IsSystemAdministrator = true
 		user.Password = "admin"
-		err := mock.UserCreate(tx, app.Db, user)
+		err := mock.UserCreate(app.Db, tx, user)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, user.Id)
 		assert.NotNil(t, user.Meta)
@@ -84,7 +84,7 @@ func TestUserCrud(t *testing.T) {
 
 		t.Log("Create another user should enable removing the new one")
 		another1 := mock.User()
-		err = mock.UserCreate(tx, app.Db, another1)
+		err = mock.UserCreate(app.Db, tx, another1)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, another1.Id)
 		deleted, err := app.Db.UserDb.Remove(tx, another1.Id)
@@ -104,7 +104,7 @@ func TestUserGrid(t *testing.T) {
 		var name, email string
 		for i := 0; i < 15; i++ {
 			user := mock.User()
-			err = mock.UserCreate(tx, app.Db, user)
+			err = mock.UserCreate(app.Db, tx, user)
 			assert.Nil(t, err)
 			if i == 0 {
 				name = user.Name

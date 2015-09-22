@@ -17,7 +17,7 @@ func User() *domain.User {
 	return t
 }
 
-func UserCreate(tx interface{}, op *database.DbOperations, item *domain.User) error {
+func UserCreate(op *database.DbOperations, tx interface{}, item *domain.User) error {
 	return op.UserDb.Create(tx, item)
 }
 
@@ -29,10 +29,10 @@ func Role() *domain.Role {
 	return &domain.Role{Name: tecutils.UUID()}
 }
 
-func RoleCreate(tx interface{}, op *database.DbOperations, item *domain.Role) error {
+func RoleCreate(op *database.DbOperations, tx interface{}, item *domain.Role) error {
 	return op.UserDb.RoleCreate(tx, item)
 }
 
-func GroupCreate(tx interface{}, op *database.DbOperations, item *domain.Group) error {
+func GroupCreate(op *database.DbOperations, tx interface{}, item *domain.Group) error {
 	return op.UserDb.GroupCreate(tx, item)
 }

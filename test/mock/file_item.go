@@ -22,6 +22,6 @@ func FileBytes() []byte {
 	return []byte(content)
 }
 
-func FileItemCreate(tx interface{}, op *database.DbOperations, item *domain.FileItem) error {
+func FileItemCreate(op *database.DbOperations, tx interface{}, item *domain.FileItem) error {
 	return op.FileItemDb.Create(tx, item)
 }

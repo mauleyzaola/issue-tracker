@@ -33,17 +33,17 @@ func TestPermissionAllowedUser(t *testing.T) {
 		assert.NotEqual(t, len(names), 0)
 
 		user := mock.User()
-		err = mock.UserCreate(tx, app.Db, user)
+		err = mock.UserCreate(app.Db, tx, user)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, user.Id)
 
 		group := mock.Group()
-		err = mock.GroupCreate(tx, app.Db, group)
+		err = mock.GroupCreate(app.Db, tx, group)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, group.Id)
 
 		scheme := mock.PermissionScheme()
-		err = mock.PermissionSchemeCreate(tx, app.Db, scheme)
+		err = mock.PermissionSchemeCreate(app.Db, tx, scheme)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, scheme.Id)
 
@@ -53,7 +53,7 @@ func TestPermissionAllowedUser(t *testing.T) {
 		itemWithUser.User = user
 		itemWithUser.PermissionScheme = scheme
 		itemWithUser.PermissionName = firstName
-		err = mock.PermissionSchemeItemCreate(tx, app.Db, itemWithUser)
+		err = mock.PermissionSchemeItemCreate(app.Db, tx, itemWithUser)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, itemWithUser.Id)
 
@@ -61,7 +61,7 @@ func TestPermissionAllowedUser(t *testing.T) {
 		itemWithGroup.Group = group
 		itemWithGroup.PermissionName = firstName
 		itemWithGroup.PermissionScheme = scheme
-		err = mock.PermissionSchemeItemCreate(tx, app.Db, itemWithGroup)
+		err = mock.PermissionSchemeItemCreate(app.Db, tx, itemWithGroup)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, itemWithGroup.Id)
 

@@ -25,7 +25,7 @@ func TestPermissionSchemeItemCrud(t *testing.T) {
 		firstName := &names[0]
 
 		user := mock.User()
-		err = mock.UserCreate(tx, app.Db, user)
+		err = mock.UserCreate(app.Db, tx, user)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, user.Id)
 
@@ -36,7 +36,7 @@ func TestPermissionSchemeItemCrud(t *testing.T) {
 		err = item.Validate()
 		assert.Nil(t, err)
 
-		mock.PermissionSchemeItemCreate(tx, app.Db, item)
+		mock.PermissionSchemeItemCreate(app.Db, tx, item)
 		assert.Nil(t, err)
 		assert.NotEmpty(t, item.Id)
 

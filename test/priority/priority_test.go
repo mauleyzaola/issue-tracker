@@ -66,7 +66,7 @@ func TestList(t *testing.T) {
 
 		t.Log("Insert a number of priorities")
 		for i := 0; i < total; i++ {
-			err = mock.PriorityCreate(tx, app.Db, mock.Priority())
+			err = mock.PriorityCreate(app.Db, tx, mock.Priority())
 			assert.Nil(t, err)
 		}
 		t.Log("Validate the number of items matches")
@@ -86,12 +86,12 @@ func TestPriorityDups(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("Create new priority, create another with same name and force error")
 		item := mock.Priority()
-		err := mock.PriorityCreate(tx, app.Db, item)
+		err := mock.PriorityCreate(app.Db, tx, item)
 		assert.Nil(t, err)
 
 		item2 := mock.Priority()
 		item2.Name = strings.ToUpper(item.Name)
-		err = mock.PriorityCreate(tx, app.Db, item2)
+		err = mock.PriorityCreate(app.Db, tx, item2)
 		assert.NotNil(t, err)
 		if err != nil {
 			t.Log(err)
@@ -103,11 +103,11 @@ func TestPriorityDups2(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("Create new priority, update another with same name and force error")
 		item := mock.Priority()
-		err := mock.PriorityCreate(tx, app.Db, item)
+		err := mock.PriorityCreate(app.Db, tx, item)
 		assert.Nil(t, err)
 
 		item2 := mock.Priority()
-		err = mock.PriorityCreate(tx, app.Db, item2)
+		err = mock.PriorityCreate(app.Db, tx, item2)
 		assert.Nil(t, err)
 
 		item3, err := app.Db.PriorityDb.Load(tx, item2.Id)

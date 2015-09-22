@@ -78,10 +78,9 @@ func (t *StatusDb) WorkflowStepDups(tx interface{}, step *domain.WorkflowStep) e
 	}
 
 	if rowCount != 0 {
-		return errors.New("Ya existe un paso para el mismo workflow con mismos valores")
+		return errors.New("there is already a step for the same workflow with the same values")
 	}
 
-	//validar que exista nada mas un paso sin estado anterior, para que sea el estado default al crear la tarea
 	if len(step.IdPrevStatus.String) == 0 {
 		query = "select count(*)  " +
 			"from workflow_step " +
@@ -99,7 +98,7 @@ func (t *StatusDb) WorkflowStepDups(tx interface{}, step *domain.WorkflowStep) e
 			return err
 		}
 		if rowCount != 0 {
-			return errors.New("Nada mas puede haber un paso sin estado anterior para un workflow")
+			return errors.New("there can only be one step without prev status for a workflow")
 		}
 	}
 
