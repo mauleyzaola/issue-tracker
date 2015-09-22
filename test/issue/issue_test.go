@@ -15,10 +15,14 @@ func TestIssueCrud(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, session)
 
-		issue := mock.Issue()
-		err = mock.IssueCreate(app.Db, tx, issue)
+		item := mock.Issue()
+		err = mock.IssueCreate(app.Db, tx, item)
 		if !assert.Nil(t, err) {
 			t.Log(err)
 		}
+
+		item2, err := app.Db.IssueDb.Remove(tx, item.Id)
+		assert.Nil(t, err)
+		assert.NotNil(t, item2)
 	})
 }
