@@ -209,8 +209,7 @@ func (t *StatusDb) WorkflowStepAvailableStatus(tx interface{}, workflow *domain.
 
 	for i, _ := range steps {
 		item := &steps[i]
-		status := &domain.Status{}
-		err = t.Base.Executor(tx).SelectOne(status, "select * from status where id = $1", item.IdNextStatus)
+		status, err := t.Load(tx, item.IdNextStatus)
 		if err != nil {
 			return nil, err
 		}
