@@ -56,5 +56,6 @@ func TestIssueChangeStatus(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, item2)
 		assert.NotEqual(t, item.Status.Id, item2.Status.Id)
+		t.Log(item.Status.Id, item2.Status.Id)
 	})
 }

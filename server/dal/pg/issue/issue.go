@@ -128,7 +128,7 @@ func (t *IssueDb) StatusChange(tx interface{}, issue *domain.Issue, status *doma
 		}
 	}
 
-	issue.Status = status
+	issue.IdStatus = status.Id
 	_, err = t.Base.Executor(tx).Update(issue)
 	if err != nil {
 		return err
@@ -140,7 +140,6 @@ func (t *IssueDb) StatusChange(tx interface{}, issue *domain.Issue, status *doma
 	}
 
 	//TODO: generate notifications to subscribers
-
 	return nil
 }
 
