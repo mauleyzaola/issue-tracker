@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/domain"
@@ -76,6 +77,70 @@ func (t *IssueDb) SetUserDb(item *database.User) {
 }
 
 func (t *IssueDb) StatusChange(tx interface{}, issue *domain.Issue, status *domain.Status, fn database.IssueStatusFn) error {
+	issue, err := t.Load(tx, issue.Id, issue.Pkey)
+	if err != nil {
+		return err
+	}
+	oldStatus := issue.Status
+
+	availableSteps, err := t.StatusDb().WorkflowStepAvailableUser(tx, issue.Workflow, issue.Status)
+	if err != nil {
+		return err
+	}
+	found := false
+	var nextStep *domain.WorkflowStep
+	for i := range availableSteps {
+		st := &availableSteps[i]
+		if st.NextStatus.Id == status.Id {
+			found = true
+			nextStep = st
+			break
+		}
+	}
+
+	if !found {
+		return fmt.Errorf("invalid status change")
+	}
+
+	if nextStep.Resolves {
+		issue.ResolvedDate = &time.Time{}
+		*issue.ResolvedDate = time.Now()
+		issue.CancelledDate = nil
+	} else if nextStep.Cancels {
+		issue.CancelledDate = &time.Time{}
+		*issue.CancelledDate = time.Now()
+		issue.ResolvedDate = nil
+	} else {
+		issue.ResolvedDate = nil
+		issue.CancelledDate = nil
+	}
+
+	if nextStep.Resolves || nextStep.Cancels {
+		children, err := t.Children(tx, issue)
+		if err != nil {
+			return err
+		}
+		for i := range children {
+			child := &children[i]
+			if child.ResolvedDate == nil && child.CancelledDate == nil {
+				return fmt.Errorf("cannot resolve or cancel the issue until all their subtasks are resolved or cancelled")
+			}
+		}
+	}
+
+	issue.Status = status
+	_, err = t.Base.Executor(tx).Update(issue)
+	if err != nil {
+		return err
+	}
+	if fn != nil {
+		if err = fn(tx, issue, nextStep, oldStatus, status); err != nil {
+			return err
+		}
+	}
+
+	//TODO: generate notifications to subscribers
+
 	return nil
 }
 

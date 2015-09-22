@@ -27,6 +27,8 @@ func (t *Api) RoutesAuth(authPath string, router *web.Mux) {
 	router.Post(authPath+"/issue/:id/attachment", t.attachmentAdd)
 	router.Delete(authPath+"/issue/:id/attachment", t.attachmentRemove)
 
+	router.Post(authPath+"/issue/:id/status", t.status)
+
 	router.Get(authPath+"/issue/:id/comments", t.comments)
 	router.Post(authPath+"/issue/:id/comment", t.commentSave)
 	router.Put(authPath+"/issue/:id/comment", t.commentSave)
