@@ -286,7 +286,45 @@ func (t *StatusDb) WorkflowStepMemberLoad(tx interface{}, item *domain.WorkflowS
 }
 
 func (t *StatusDb) WorkflowStepMemberGroups(tx interface{}, item *domain.WorkflowStep) (selected []domain.Group, unselected []domain.Group, err error) {
-	return nil, nil, nil
+	query := `
+		select	u.*
+		from		groups u
+		where	not exists(	select	null
+					from	workflow_step_member
+					where	idworkflowstep = $1
+					and	idgroup = u.id)
+		order by u.name
+	`
+
+	_, err = t.Base.Executor(tx).Select(&unselected, query, item.Id)
+	if err != nil {
+		return
+	}
+
+	query =
+		`
+		select	u.*
+		from	workflow_step_member m
+		join		groups u on u.id = m.idgroup
+		where	m.idworkflowstep = $1
+		order by u.name
+	`
+
+	_, err = t.Base.Executor(tx).Select(&selected, query, item.Id)
+	if err != nil {
+		return
+	}
+
+	for i := range unselected {
+		u := &unselected[i]
+		u.Initialize()
+	}
+	for i := range selected {
+		u := &selected[i]
+		u.Initialize()
+	}
+
+	return
 }
 
 func (t *StatusDb) WorkflowStepMemberUsers(tx interface{}, item *domain.WorkflowStep) (selected []domain.User, unselected []domain.User, err error) {
@@ -327,6 +365,7 @@ func (t *StatusDb) WorkflowStepMemberUsers(tx interface{}, item *domain.Workflow
 		u := &selected[i]
 		u.Initialize()
 	}
+
 	return
 }
 
@@ -335,7 +374,8 @@ func (t *StatusDb) WorkflowStepMemberAdd(tx interface{}, item *domain.WorkflowSt
 	if err != nil {
 		return err
 	}
-	return t.Base.Executor(tx).Insert(item)
+	err = t.Base.Executor(tx).Insert(item)
+	return err
 }
 
 func (t *StatusDb) WorkflowStepMemberRemove(tx interface{}, item *domain.WorkflowStepMember) error {

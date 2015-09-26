@@ -55,9 +55,7 @@ func (t *IssueDb) SubscriptionsUser(tx interface{}, grid *tecgrid.NgGrid, user *
 }
 
 func (t *IssueDb) SubscriptionToggle(tx interface{}, issue *domain.Issue) (selected bool, err error) {
-	t.Base.SqlTraceOn()
 	selected, err = t.SubscriptionToggleUser(tx, issue, t.Base.CurrentSession().User)
-	t.Base.SqlTraceOff()
 	return
 }
 

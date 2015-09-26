@@ -134,7 +134,7 @@ func (t *Api) workflowStepMemberAdd(c web.C, w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	err = t.base.Database.StatusDb.WorkflowStepMemberRemove(tx, item)
+	err = t.base.Database.StatusDb.WorkflowStepMemberAdd(tx, item)
 	if err != nil {
 		t.base.ErrorResponse(tx, err, w)
 		return
@@ -164,7 +164,7 @@ func (t *Api) workflowStepMemberRemove(c web.C, w http.ResponseWriter, r *http.R
 		return
 	}
 
-	err = t.base.Database.StatusDb.WorkflowStepMemberAdd(tx, item)
+	err = t.base.Database.StatusDb.WorkflowStepMemberRemove(tx, item)
 	if err != nil {
 		t.base.ErrorResponse(tx, err, w)
 		return
