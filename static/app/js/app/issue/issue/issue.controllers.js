@@ -263,6 +263,7 @@ angular.module("TrackerApp.Issue.controllers", [])
             IssueService.subscriptionToggle($scope.item)
                 .then(function(data){
                     $scope.isSubscribed = data.selected;
+                    loadSubscriptions();
                 });
         }
 
@@ -299,16 +300,6 @@ angular.module("TrackerApp.Issue.controllers", [])
             $location.path(BrowserUrlService.issue.edit(issue.pkey));
         }
 
-        $scope.browsePo=function(po){
-            if (!po){return;}
-            return BrowserUrlService.purchaseOrder.edit(po.id);
-        }
-
-        $scope.browseStockMovement = function(stock){
-            if(!stock){return;}
-            return BrowserUrlService.stockMovement.edit(stock.stockMovementHeader.id);
-        }
-
 
         $scope.assignToMe = function(){
             IssueService.assignToMe({id:$scope.item.id})
@@ -330,6 +321,7 @@ angular.module("TrackerApp.Issue.controllers", [])
                 user: { id:user.id }
             }).then(function(data){
                 $scope.subscribers = data;
+                loadSubscriptions();
             });
         }
     });

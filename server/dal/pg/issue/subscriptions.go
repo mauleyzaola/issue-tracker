@@ -55,13 +55,15 @@ func (t *IssueDb) SubscriptionsUser(tx interface{}, grid *tecgrid.NgGrid, user *
 }
 
 func (t *IssueDb) SubscriptionToggle(tx interface{}, issue *domain.Issue) (selected bool, err error) {
+	t.Base.SqlTraceOn()
 	selected, err = t.SubscriptionToggleUser(tx, issue, t.Base.CurrentSession().User)
+	t.Base.SqlTraceOff()
 	return
 }
 
 func (t *IssueDb) SubscriptionToggleUser(tx interface{}, issue *domain.Issue, user *domain.User) (selected bool, err error) {
 	var oldItem domain.IssueSubscription
-	err = t.Base.Executor(tx).SelectOne(&oldItem, "select * from issue_subscription where idissue=$1 and iduser=$2", issue, user)
+	err = t.Base.Executor(tx).SelectOne(&oldItem, "select * from issue_subscription where idissue=$1 and iduser=$2", issue.Id, user.Id)
 	if err != nil && err != sql.ErrNoRows {
 		return
 	}
