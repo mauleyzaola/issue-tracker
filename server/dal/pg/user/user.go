@@ -86,7 +86,7 @@ func (t *UserDb) Load(tx interface{}, id string) (*domain.User, error) {
 
 func (t *UserDb) Remove(tx interface{}, id string) (*domain.User, error) {
 	if t.Base.CurrentSession().User.Id == id {
-		return nil, errors.New("No te puedes eliminar a ti mismo")
+		return nil, errors.New("cannot remove yourself")
 	}
 
 	item, err := t.Load(tx, id)
@@ -110,10 +110,9 @@ func (t *UserDb) Remove(tx interface{}, id string) (*domain.User, error) {
 	}
 
 	if count, _ := t.CountSystemAdministrators(tx); count == 0 {
-		return nil, errors.New("Debe haber al menos un usuario con permisos de administrador y que pueda iniciar sesion")
+		return nil, errors.New("there must be at least one sysadmin user who can login")
 	}
 
-	//todo:eliminar la configuracion del menu
 	return item, err
 }
 
@@ -143,7 +142,7 @@ func (t *UserDb) Update(tx interface{}, item *domain.User) error {
 
 	count, err := t.CountSystemAdministrators(tx)
 	if count == 0 && err == nil {
-		return errors.New("Debe haber al menos un usuario con permisos de administrador y que pueda iniciar sesion")
+		return errors.New("there must be at least one sysadmin user who can login")
 	} else if err != nil {
 		return err
 	}

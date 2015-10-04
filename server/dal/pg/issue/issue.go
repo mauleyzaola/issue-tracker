@@ -213,7 +213,6 @@ func (t *IssueDb) Create(tx interface{}, item *domain.Issue, parent string) erro
 
 	item.IdStatus = statuses[0].NextStatus.Id
 
-	//si se pasa un parent como parametro, crear la relacion correspondiente
 	if len(parent) != 0 {
 		item.IdParent.Valid = true
 		item.IdParent.String = parent

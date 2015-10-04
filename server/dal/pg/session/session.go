@@ -34,10 +34,10 @@ func (t *SessionDb) ValidateToken(tx interface{}, id string) (*domain.Session, e
 		return nil, err
 	}
 	if !session.User.IsActive {
-		return nil, fmt.Errorf("Usuario invalido para esta operacion")
+		return nil, fmt.Errorf("invalid user")
 	}
 	if session.Expires.Before(time.Now()) {
-		return nil, errors.New("La sesion ha expirado")
+		return nil, errors.New("session has expired")
 	}
 	return session, err
 }
@@ -71,7 +71,7 @@ func (t *SessionDb) Load(tx interface{}, id string) (*domain.Session, error) {
 
 func (t *SessionDb) Remove(tx interface{}, id string, validateCurrentSession bool) error {
 	if validateCurrentSession && id == t.Base.CurrentSession().Id {
-		return fmt.Errorf("No se puede eliminar el token de la sesion activa")
+		return fmt.Errorf("cannot revome the current session")
 	}
 
 	session, err := t.Load(tx, id)

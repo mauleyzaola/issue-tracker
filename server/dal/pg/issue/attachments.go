@@ -21,7 +21,7 @@ func (t *IssueDb) AttachmentAdd(tx interface{}, issue *domain.Issue, item *domai
 	}
 
 	if !oldIssue.AcceptUpdates() {
-		return nil, errors.New("No se pueden subir archivos en tareas que ya estan resueltas")
+		return nil, errors.New("Cannot add attachments to resolved issues")
 	}
 
 	newFile, err := t.FileItemDb().Load(tx, item.Id)
@@ -79,7 +79,7 @@ func (t *IssueDb) AttachmentRemove(tx interface{}, attachment *domain.IssueAttac
 	}
 
 	if !oldItem.Issue.AcceptUpdates() {
-		return errors.New("No se puede eliminar un archivo de una tarea resuelta")
+		return errors.New("Cannot remove attachment from a resolved issue")
 	}
 
 	permission := &domain.PermissionName{}
