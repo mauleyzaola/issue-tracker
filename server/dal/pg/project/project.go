@@ -280,7 +280,7 @@ func (t *ProjectDb) ValidateDups(tx interface{}, item *domain.Project) error {
 		return err
 	}
 	if count != 0 {
-		return fmt.Errorf("el proyecto %s o la clave %s estan duplicadas con otro registro", item.Name, item.Pkey)
+		return fmt.Errorf("the project %s or key %s are duplicated ", item.Name, item.Pkey)
 	}
 	return nil
 }

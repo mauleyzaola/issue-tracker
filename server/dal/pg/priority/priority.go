@@ -118,5 +118,5 @@ func (t *PriorityDb) ValidateDups(tx interface{}, item *domain.Priority) error {
 	if count == 0 {
 		return nil
 	}
-	return fmt.Errorf("ya existe una prioridad con el nombre %s", item.Name)
+	return fmt.Errorf("there is already another priority with the name %s", item.Name)
 }

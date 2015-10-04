@@ -11,7 +11,7 @@ server {
 	# end gzip configuration
     
     location / {
-		root /home/mleyzaola/go/src/github.com/mauleyzaola/issue-tracker/static/dist;
+		root /home/mleyzaola/go/src/github.com/mauleyzaola/issue-tracker/static/app;
 		try_files $uri $uri/ /index.html = 404;
     }
 	

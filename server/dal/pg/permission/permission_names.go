@@ -53,7 +53,6 @@ func (t *PermissionDb) AvailablesUser(tx interface{}, user *domain.User, issue *
 		return nil, err
 	}
 
-	//es un sysadmin, devolver siempre todos los permisos disponibles
 	if currUser.IsSystemAdministrator {
 		return t.Names(tx)
 	}
