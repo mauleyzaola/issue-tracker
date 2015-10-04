@@ -25,4 +25,7 @@ type Db interface {
 	//Contains the object which holds information about the current session connected
 	//to the system
 	CurrentSession
+
+	//Closes the db connections and releases resources
+	Close()
 }

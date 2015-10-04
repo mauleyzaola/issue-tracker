@@ -1,20 +1,22 @@
 package setup
 
 import (
-	"github.com/go-gorp/gorp"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	mgo "gopkg.in/mgo.v2"
 )
 
 type Application struct {
 	RootChDir   string
 	Environment string
-	Postgres    *gorp.DbMap
+
+	//should be a pointer to *gorp.DbMap
+	Postgres    interface{}
 	BaseUrl     string
 	BaseApiName string
-	Mongo       *mgo.Database
-	PostgresDb  *ConfigurationDatabase
-	Db          *database.DbOperations
+
+	//should be a pointer to *mgo.Database
+	Mongo      interface{}
+	PostgresDb *ConfigurationDatabase
+	Db         *database.DbOperations
 }
 
 type ConfigurationDatabase struct {

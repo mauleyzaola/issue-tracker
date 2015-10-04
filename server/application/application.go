@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/go-gorp/gorp"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/account"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/bootstrap"
@@ -19,6 +20,7 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/user"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
 	"github.com/mauleyzaola/issue-tracker/server/operations/setup"
+	mgo "gopkg.in/mgo.v2"
 )
 
 type Application struct {
@@ -65,7 +67,11 @@ func ParseConfiguration(fileName string) (app *Application) {
 	var userDb database.User
 
 	if app.Setup.PostgresDb != nil {
-		db = pg.New(app.Setup.Postgres)
+		if val, ok := app.Setup.Postgres.(*gorp.DbMap); !ok {
+			log.Fatal("PostgresDb is wrong type. expected *gorp.DbMap")
+		} else {
+			db = pg.New(val)
+		}
 
 		accountDb = account.New(db)
 		bootstrapDb = bootstrap.New(db)
@@ -77,6 +83,12 @@ func ParseConfiguration(fileName string) (app *Application) {
 		sessionDb = session.New(db)
 		statusDb = status.New(db)
 		userDb = user.New(db)
+	} else if app.Setup.Mongo != nil {
+		if _, ok := app.Setup.Mongo.(*mgo.Database); !ok {
+			log.Fatal("Mongo is wrong type. expected *mgo.Database")
+		} else {
+			log.Fatal("mongo is not implemented yet")
+		}
 	} else {
 		log.Fatal("Cannot find any database implementation available")
 	}

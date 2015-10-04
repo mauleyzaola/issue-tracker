@@ -37,7 +37,7 @@ func main() {
 
 	graceful.PostHook(func() {
 		log.Println("Application is closing now... releasing resources")
-		app.Setup.Postgres.Db.Close()
+		app.Db.Db.Close()
 	})
 	goji.Serve()
 }

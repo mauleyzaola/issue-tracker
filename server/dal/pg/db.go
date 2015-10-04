@@ -120,3 +120,7 @@ func (r *Db) SequenceRemove(tx interface{}, seqName string) (err error) {
 	_, err = r.Executor(tx).Exec(fmt.Sprintf("drop sequence if exists %s", seqName))
 	return
 }
+
+func (r *Db) Close() {
+	r.DbMap.Db.Close()
+}

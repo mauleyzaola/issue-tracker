@@ -10,6 +10,7 @@ if ! go get -v ./...; then
 fi
 
 go get bitbucket.org/liamstask/goose/cmd/goose
+go get github.com/stretchr/testify/assert
 
 echo "
 
