@@ -452,22 +452,22 @@ func (t *IssueDb) Children(tx interface{}, issue *domain.Issue) ([]database.Issu
 	return items, nil
 }
 
-func (t *IssueDb) MoveProject(tx interface{}, issue *domain.Issue, target *domain.Project) error {
+func (t *IssueDb) MoveProject(tx interface{}, issue *domain.Issue, target *domain.Project) (*domain.Issue, error) {
 	if target == nil || len(target.Id) == 0 {
-		return fmt.Errorf("missing project")
+		return nil, fmt.Errorf("missing project")
 	}
 
 	oldIssue, err := t.Load(tx, issue.Id, "")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	oldProject, err := t.ProjectDb().Load(tx, target.Id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if issue.Project != nil && oldIssue.Project != nil && oldIssue.Project.Id == target.Id {
-		return fmt.Errorf("the issue already belongs to this project, there is nothing to do")
+		return nil, fmt.Errorf("the issue already belongs to this project, there is nothing to do")
 	}
 
 	target = oldProject
@@ -477,12 +477,12 @@ func (t *IssueDb) MoveProject(tx interface{}, issue *domain.Issue, target *domai
 	permission.Name = domain.PERMISSION_DELETE_ISSUE
 	ok, err := t.PermissionDb().AllowedUser(tx, t.Base.CurrentSession().User, issue, permission)
 	if !ok {
-		return errors.New("db.Base.AccessDenied()")
+		return nil, errors.New("db.Base.AccessDenied()")
 	}
 
 	project, err := t.ProjectDb().NextNumber(tx, target.Id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	issue.Pkey = project.IssueKey()
 	issue.Project = target
@@ -491,9 +491,16 @@ func (t *IssueDb) MoveProject(tx interface{}, issue *domain.Issue, target *domai
 	permission.Name = domain.PERMISSION_CREATE_ISSUE
 	ok, err = t.PermissionDb().AllowedUser(tx, t.Base.CurrentSession().User, issue, permission)
 	if !ok {
-		return errors.New("db.Base.AccessDenied()")
+		return nil, errors.New("db.Base.AccessDenied()")
 	}
 
-	_, err = t.Base.Executor(tx).Update(issue)
-	return err
+	if _, err = t.Base.Executor(tx).Update(issue); err != nil {
+		return nil, err
+	}
+
+	if issue, err = t.Load(tx, issue.Id, issue.Pkey); err != nil {
+		return nil, err
+	} else {
+		return issue, nil
+	}
 }

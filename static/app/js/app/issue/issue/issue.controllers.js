@@ -171,7 +171,7 @@ angular.module("TrackerApp.Issue.controllers", [])
                                 dialogs.projectSelectDialog.modal('hide');
                                 $timeout(function(){
                                     BrowserService.issue.edit(data.pkey);
-                                },100);
+                                },200);
                             });
                         } else {
                             dialogs.projectSelectDialog.modal('hide');

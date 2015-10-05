@@ -131,7 +131,7 @@ type Issue interface {
 
 	//Updates an Issue moving the project from where it belongs. A new pkey is assigned and new
 	//permissions will apply depending on the new project configuration
-	MoveProject(tx interface{}, issue *domain.Issue, target *domain.Project) error
+	MoveProject(tx interface{}, issue *domain.Issue, target *domain.Project) (*domain.Issue, error)
 }
 
 type IssueGroupResult struct {

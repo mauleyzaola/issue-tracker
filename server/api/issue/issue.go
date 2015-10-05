@@ -264,6 +264,6 @@ func (t *Api) move(c web.C, w http.ResponseWriter, r *http.Request) {
 		t.base.ErrorResponse(tx, err, w)
 		return
 	}
-	err = t.base.Database.IssueDb.MoveProject(tx, item, item.Project)
+	item, err = t.base.Database.IssueDb.MoveProject(tx, item, item.Project)
 	t.base.Response(tx, err, w, item)
 }
