@@ -92,7 +92,7 @@ func TestIssueMoveProject(t *testing.T) {
 		oldkey := issue.Pkey
 
 		t.Log("move the issue to the second project")
-		err = app.Db.IssueDb.MoveProject(tx, issue, p2)
+		_, err = app.Db.IssueDb.MoveProject(tx, issue, p2)
 		assert.Nil(t, err)
 
 		t.Log("validate the issue's key matches its new project")
