@@ -25,8 +25,8 @@ var menus = function(){
         iconCss:'fa-bar-chart',
         name:'Issues',
         items:[
-            { name:'Todo', target:'/issue/issues/list' },
-            { name:'Resolved', target:'/issue/issues/list' },
+            { name:'Todo', target:'/issue/issues/list?resolved=false' },
+            { name:'Resolved', target:'/issue/issues/list?resolved=true' },
             { name:'Projects', target:'/issue/projects' }
         ]
     };
