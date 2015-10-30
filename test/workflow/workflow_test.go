@@ -10,6 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestVicente(t *testing.T) {
+	assert.NotNil(t, nil)
+}
+
 func TestCrud(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		t.Log("Given a new workflow, perform some crud operations")
