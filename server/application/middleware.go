@@ -16,7 +16,7 @@ func (a *Application) MiddlewareAttach(c *web.C, h http.Handler) http.Handler {
 
 		baseApi := api.New(a.Setup)
 		c.Env[operations.MIDDLEWARE_BASE_API] = baseApi
-		c.Env[operations.MIDDLEWARE_DB] = baseApi.Database
+		c.Env[operations.MIDDLEWARE_DB] = a.Db
 		h.ServeHTTP(w, r)
 	}
 	return http.HandlerFunc(fn)

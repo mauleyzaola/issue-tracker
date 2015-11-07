@@ -9,7 +9,7 @@ if ! go get -v ./...; then
     exit 1
 fi
 
-go get bitbucket.org/liamstask/goose/cmd/goose
+go get github.com/rubenv/sql-migrate/...
 go get github.com/stretchr/testify/assert
 
 echo "
@@ -17,14 +17,18 @@ echo "
 upgrading test database objects to latest version...
 "
 
-cd dbmigrations/pg
+psql -c 'drop database if exists tracker_test;'
+psql -c 'create database tracker_test;'
 
-if ! goose -env="test" up; then
+
+cd migrations
+
+if ! sql-migrate up -env=test; then
     echo "[FAIL] Failed to upgrade the test database"
     exit 1
 fi
 
-cd ../../
+cd ../
 
 
 echo "
@@ -33,9 +37,18 @@ testing all the packages...
 "
 cd test
 
-if ! go test -v ./...; then
-    echo "[FAIL] One or more unit tests failed."
-    exit 1
-fi
+#cannot run all tests at once, so we loop instead on each directory looking for test files
+for dir in ./*
+do
+    dir=${dir%*/}
+    if [ -d "$dir" ]; then
+	cd "$dir"
+	if ! go test -v; then
+	   echo "[FAIL] One or more unit tests failed."
+	   exit 1
+	fi 
+	cd ..
+    fi
+done
 
 cd ..

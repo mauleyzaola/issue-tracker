@@ -115,18 +115,18 @@ func (t *BootstrapDb) UpgradeDbScripts(environment string, chdir string) error {
 		return err
 	}
 
-	err = t.ResetApplicationPath("../dbmigrations/pg")
+	err = t.ResetApplicationPath("../migrations")
 	if err != nil {
 		return err
 	}
 
 	var params []string
+	params = append(params, "up")
 	if len(environment) != 0 {
 		params = append(params, "-env="+environment)
 	}
-	params = append(params, "up")
 
-	cmd := exec.Command("goose", params...)
+	cmd := exec.Command("sql-migrate", params...)
 	result, err := cmd.CombinedOutput()
 	if len(result) != 0 {
 		log.Println(string(result))

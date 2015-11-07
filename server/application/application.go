@@ -93,9 +93,13 @@ func ParseConfiguration(fileName string) (app *Application) {
 		log.Fatal("Cannot find any database implementation available")
 	}
 
-	app.Setup.Db = &database.DbOperations{}
-	ops := app.Setup.Db
+	//	app.Setup.Db = &database.DbOperations{}
+	//ops := app.Setup.Db
+	ops := &database.DbOperations{}
 	ops.Db = db
+	app.Db = ops
+	app.Setup.Db = ops
+
 	ops.AccountDb = accountDb
 	ops.BootstrapDb = bootstrapDb
 	ops.FileItemDb = fileItemDb
