@@ -25,10 +25,6 @@ func factoryDb() *application.Application {
 		log.Fatal(err)
 	}
 
-	//TODO: see why this assignment is required to avoid nil references when calling
-	//directly app.Db from unit tests
-	app.Db = app.Setup.Db
-
 	return app
 }
 

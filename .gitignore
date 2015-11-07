@@ -10,3 +10,6 @@ config.json
 dbconf.yml
 
 *.exe
+
+#migration files
+migrations/dbconfig.yml

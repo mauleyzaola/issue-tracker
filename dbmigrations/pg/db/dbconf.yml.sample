@@ -1,7 +1,0 @@
-development:
-    driver: postgres
-    open: user=postgres dbname=tracker sslmode=disable host=localhost password=nevermind
-
-test:
-    driver: postgres
-    open: user=postgres dbname=tracker_test sslmode=disable host=localhost password=nevermind
