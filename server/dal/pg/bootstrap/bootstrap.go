@@ -4,13 +4,15 @@ import (
 	"database/sql"
 	"log"
 	"os"
-	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
+	"github.com/mauleyzaola/issue-tracker/server/operations/setup"
+	"github.com/rubenv/sql-migrate"
 )
 
 type BootstrapDb struct {
@@ -49,8 +51,33 @@ func (db *BootstrapDb) SetUserDb(item *database.User) {
 	db.userDb = item
 }
 
-func (db *BootstrapDb) BootstrapAll(tx interface{}, environment string, chdir string) error {
-	err := db.UpgradeDbScripts(environment, chdir)
+func (t *BootstrapDb) UpgradeDbScripts(conn *setup.ConfigurationDatabase, environment, chdir string) error {
+	connStr, err := conn.ConnectionString()
+	if err != nil {
+		return err
+	}
+
+	db, err := sql.Open(conn.Driver, connStr)
+	if err != nil {
+		return err
+	}
+
+	migrations := &migrate.FileMigrationSource{Dir: filepath.Join(chdir, "migrations", conn.Driver)}
+	migrate.SetTable("migration_issue_tracker")
+
+	log.Printf("connecting to: %s\t%s\n", conn.Driver, conn.DatabaseName)
+	counter, err := migrate.Exec(db, conn.Driver, migrations, migrate.Up)
+	if err != nil {
+		log.Println("error trying to execute migration:", err)
+		return err
+	}
+	log.Printf("applied %v db scripts in issue-tracker migration\n", counter)
+
+	return t.ResetApplicationPath(chdir)
+}
+
+func (db *BootstrapDb) BootstrapAll(tx interface{}, conn *setup.ConfigurationDatabase, environment string, chdir string) error {
+	err := db.UpgradeDbScripts(conn, environment, chdir)
 	if err != nil {
 		return err
 	}
@@ -107,32 +134,6 @@ func (db *BootstrapDb) BootstrapAdminUser(tx interface{}) (bool, *domain.User, e
 
 func (db *BootstrapDb) ResetApplicationPath(chdir string) error {
 	return os.Chdir(chdir)
-}
-
-func (t *BootstrapDb) UpgradeDbScripts(environment string, chdir string) error {
-	err := t.ResetApplicationPath(chdir)
-	if err != nil {
-		return err
-	}
-
-	err = t.ResetApplicationPath("../migrations")
-	if err != nil {
-		return err
-	}
-
-	var params []string
-	params = append(params, "up")
-	if len(environment) != 0 {
-		params = append(params, "-env="+environment)
-	}
-
-	cmd := exec.Command("sql-migrate", params...)
-	result, err := cmd.CombinedOutput()
-	if len(result) != 0 {
-		log.Println(string(result))
-	}
-
-	return err
 }
 
 func (t *BootstrapDb) CreatePermissionNames(tx interface{}) error {

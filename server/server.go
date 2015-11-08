@@ -18,13 +18,21 @@ func main() {
 
 	log.Printf("Configuration file:%s\n", *jsonFile)
 
-	app := application.ParseConfiguration(*jsonFile)
-
-	//get the base root path of the application
 	rootChDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		log.Fatal(err)
 	}
+	if err = os.Chdir("../"); err != nil {
+		log.Fatal(err)
+	}
+
+	if rootChDir, err = os.Getwd(); err != nil {
+		log.Fatal(err)
+	}
+
+	app := application.ParseConfiguration(filepath.Join(rootChDir, "server", *jsonFile), rootChDir)
+
+	//get the base root path of the application
 	app.Setup.RootChDir = rootChDir
 
 	err = app.BootstrapApplication()
@@ -37,8 +45,6 @@ func main() {
 
 	graceful.PostHook(func() {
 		log.Println("Application is closing now... releasing resources")
-		//		app.Setup.Db.Db.Close()
-		//		app.Db.Db.Close()
 		log.Println(app.Db == nil)
 	})
 	goji.Serve()

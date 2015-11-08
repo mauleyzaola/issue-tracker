@@ -2,26 +2,27 @@ package test
 
 import (
 	"log"
-	"path"
+	"os"
 	"path/filepath"
 
 	"github.com/mauleyzaola/issue-tracker/server/application"
-	"github.com/mauleyzaola/tecutils"
 )
 
 //reads from config file and returns the app object
 //TODO: make this work under an isolated enviroment like root from upstart
 func factoryDb() *application.Application {
-	pkg, err := tecutils.GetPackageFullPath("github.com/mauleyzaola/issue-tracker/test")
-	rootChDir, err := filepath.Abs(pkg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	app := application.ParseConfiguration(path.Join(rootChDir, "config.json"))
-	app.Setup.RootChDir = rootChDir
+	home := os.Getenv("HOME")
+	rootPath := filepath.Join(home, "go", "src", "github.com", "mauleyzaola", "issue-tracker")
+
+	configFile := filepath.Join(rootPath, "test", "config.json")
+
+	app := application.ParseConfiguration(configFile, rootPath)
+	app.Setup.RootChDir = rootPath
+
+	app.Db.Db.Register()
 
 	//execute bootstrappers in test env
-	if err = app.BootstrapApplication(); err != nil {
+	if err := app.BootstrapApplication(); err != nil {
 		log.Fatal(err)
 	}
 

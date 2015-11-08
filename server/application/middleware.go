@@ -14,7 +14,7 @@ import (
 func (a *Application) MiddlewareAttach(c *web.C, h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 
-		baseApi := api.New(a.Setup)
+		baseApi := api.New(a.Db, a.Setup)
 		c.Env[operations.MIDDLEWARE_BASE_API] = baseApi
 		c.Env[operations.MIDDLEWARE_DB] = a.Db
 		h.ServeHTTP(w, r)
@@ -39,7 +39,7 @@ func (a *Application) MiddlewareAuth(c *web.C, h http.Handler) http.Handler {
 			token = r.URL.Query().Get(tokenLabel)
 		}
 
-		db := a.Setup.Db
+		db := a.Db
 
 		tx, _ := db.Db.Begin()
 		session, err := db.SessionDb.ValidateToken(tx, token)

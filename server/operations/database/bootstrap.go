@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/mauleyzaola/issue-tracker/server/domain"
+	"github.com/mauleyzaola/issue-tracker/server/operations/setup"
 )
 
 type Bootstrap interface {
@@ -16,7 +17,7 @@ type Bootstrap interface {
 
 	//Bootstraps the database and configuration for the first time the app runs
 	//database and db objects must exist before this method is executed
-	BootstrapAll(tx interface{}, environment string, chdir string) error
+	BootstrapAll(tx interface{}, conn *setup.ConfigurationDatabase, environment string, chdir string) error
 
 	//Creates the first admin user in database, if it already exists returns true on first return value
 	BootstrapAdminUser(tx interface{}) (exists bool, admin *domain.User, err error)
@@ -25,7 +26,7 @@ type Bootstrap interface {
 	ResetApplicationPath(chdir string) error
 
 	//Executes any migration tool to upgrade db objects and data
-	UpgradeDbScripts(environment string, chdir string) error
+	UpgradeDbScripts(conn *setup.ConfigurationDatabase, environment string, chdir string) error
 
 	//Bootstraps all the permission names
 	CreatePermissionNames(tx interface{}) error

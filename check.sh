@@ -20,17 +20,6 @@ upgrading test database objects to latest version...
 psql -c 'drop database if exists tracker_test;'
 psql -c 'create database tracker_test;'
 
-
-cd migrations
-
-if ! sql-migrate up -env=test; then
-    echo "[FAIL] Failed to upgrade the test database"
-    exit 1
-fi
-
-cd ../
-
-
 echo "
 
 testing all the packages...

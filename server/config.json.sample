@@ -2,10 +2,11 @@
 	"environment":"development",
 	"baseUrl":"http://localhost",
 	"baseApiName":"api",
-	"PostgresDb": {
+	"relationalDb": {
 		"host":"localhost",
 		"databaseName": "tracker",
 		"userName": "postgres",
-		"password":"nevermind"
+		"password":"nevermind",
+		"driver":"postgres"
 	}
 }

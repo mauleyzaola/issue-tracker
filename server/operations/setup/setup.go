@@ -1,22 +1,23 @@
 package setup
 
 import (
-	"github.com/mauleyzaola/issue-tracker/server/operations/database"
+	"fmt"
+
+	"github.com/go-gorp/gorp"
+	mgo "gopkg.in/mgo.v2"
 )
 
 type Application struct {
-	RootChDir   string
-	Environment string
-
-	//should be a pointer to *gorp.DbMap
-	Postgres    interface{}
-	BaseUrl     string
-	BaseApiName string
-
-	//should be a pointer to *mgo.Database
-	Mongo      interface{}
-	PostgresDb *ConfigurationDatabase
-	Db         *database.DbOperations
+	RootChDir    string
+	Environment  string
+	Relational   *gorp.DbMap
+	BaseUrl      string
+	BaseApiName  string
+	Mongo        *mgo.Database
+	RelationalDb *ConfigurationDatabase
+	MongoDb      *ConfigurationDatabase
+	IndexerUrl   string
+	Indexer      interface{}
 }
 
 type ConfigurationDatabase struct {
@@ -24,4 +25,16 @@ type ConfigurationDatabase struct {
 	DatabaseName string
 	Username     string
 	Password     string
+	Driver       string
+}
+
+func (t *ConfigurationDatabase) ConnectionString() (string, error) {
+	switch t.Driver {
+	case "mssql":
+		return fmt.Sprintf("server=%s;user id=%s;password=%s;database=%s;", t.Host, t.Username, t.Password, t.DatabaseName), nil
+	case "postgres":
+		return fmt.Sprintf("user=%s host=%s dbname=%s password=%s sslmode=disable", t.Username, t.Host, t.DatabaseName, t.Password), nil
+	default:
+		return "", fmt.Errorf("not supported database driver")
+	}
 }

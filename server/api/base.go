@@ -22,8 +22,8 @@ type HttpMessage struct {
 	Message    string
 }
 
-func New(setup *setup.Application) *ApiBase {
-	return &ApiBase{Database: setup.Db, Setup: setup}
+func New(db *database.DbOperations, setup *setup.Application) *ApiBase {
+	return &ApiBase{Database: db, Setup: setup}
 }
 
 func (base *ApiBase) SuccessResponse(tx interface{}, w http.ResponseWriter) {

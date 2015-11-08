@@ -9,16 +9,30 @@ import (
 )
 
 func (a *Application) initDb() error {
+	if a.Setup.RelationalDb != nil {
+		var (
+			dialect          gorp.Dialect
+			connectionString string
+		)
 
-	if a.Setup.PostgresDb != nil {
-		connectionString := fmt.Sprintf("user=%s host=%s dbname=%s password=%s sslmode=disable", a.Setup.PostgresDb.Username, a.Setup.PostgresDb.Host, a.Setup.PostgresDb.DatabaseName, a.Setup.PostgresDb.Password)
-		db, err := sql.Open("postgres", connectionString)
+		connectionString, err := a.Setup.RelationalDb.ConnectionString()
 		if err != nil {
 			return err
-		} else {
-			a.Setup.Postgres = &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
 		}
 
+		db, err := sql.Open(a.Setup.RelationalDb.Driver, connectionString)
+		if err != nil {
+			return err
+		}
+		switch a.Setup.RelationalDb.Driver {
+		case "postgres":
+			dialect = gorp.PostgresDialect{}
+		default:
+			return fmt.Errorf("unsopported db dialect")
+		}
+		a.Setup.Relational = &gorp.DbMap{Db: db, Dialect: dialect}
+	} else {
+		return fmt.Errorf("cannot open any relational database")
 	}
 
 	return nil

@@ -8,9 +8,9 @@ func (a *Application) BootstrapApplication() error {
 		return err
 	}
 
-	err = a.Db.BootstrapDb.BootstrapAll(tx, a.Setup.Environment, a.Setup.RootChDir)
+	err = a.Db.BootstrapDb.BootstrapAll(tx, a.Setup.RelationalDb, a.Setup.Environment, a.Setup.RootChDir)
 	if err != nil {
-		a.Setup.Db.Db.Rollback(tx)
+		a.Db.Db.Rollback(tx)
 		return err
 	}
 

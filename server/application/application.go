@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/go-gorp/gorp"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/account"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/bootstrap"
@@ -20,7 +19,6 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/user"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
 	"github.com/mauleyzaola/issue-tracker/server/operations/setup"
-	mgo "gopkg.in/mgo.v2"
 )
 
 type Application struct {
@@ -28,7 +26,7 @@ type Application struct {
 	Db    *database.DbOperations
 }
 
-func ParseConfiguration(fileName string) (app *Application) {
+func ParseConfiguration(fileName, rootDir string) (app *Application) {
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Fatal("Cannot read from configuration file ", err.Error())
@@ -37,10 +35,8 @@ func ParseConfiguration(fileName string) (app *Application) {
 
 	app = &Application{}
 	app.Setup = &setup.Application{}
-	json.Unmarshal(data, app.Setup)
-
-	if err != nil {
-		log.Fatal(err.Error)
+	if err = json.Unmarshal(data, app.Setup); err != nil {
+		log.Fatal("cannot parse config.json: ", err.Error())
 	}
 
 	//if there is no environment on the configuration file, exit with error
@@ -48,7 +44,8 @@ func ParseConfiguration(fileName string) (app *Application) {
 		log.Fatal(fmt.Errorf("there is no environment set in the configuration file"))
 	}
 
-	//intentar configurar las conexiones a las bases de datos
+	app.Setup.RootChDir = rootDir
+
 	err = app.initDb()
 	if err != nil {
 		log.Fatal(err)
@@ -66,39 +63,23 @@ func ParseConfiguration(fileName string) (app *Application) {
 	var statusDb database.Status
 	var userDb database.User
 
-	if app.Setup.PostgresDb != nil {
-		if val, ok := app.Setup.Postgres.(*gorp.DbMap); !ok {
-			log.Fatal("PostgresDb is wrong type. expected *gorp.DbMap")
-		} else {
-			db = pg.New(val)
-		}
+	db = pg.New(app.Setup.Relational)
 
-		accountDb = account.New(db)
-		bootstrapDb = bootstrap.New(db)
-		fileItemDb = fileitem.New(db)
-		issueDb = issue.New(db)
-		permissionDb = permission.New(db)
-		priorityDb = priority.New(db)
-		projectDb = project.New(db)
-		sessionDb = session.New(db)
-		statusDb = status.New(db)
-		userDb = user.New(db)
-	} else if app.Setup.Mongo != nil {
-		if _, ok := app.Setup.Mongo.(*mgo.Database); !ok {
-			log.Fatal("Mongo is wrong type. expected *mgo.Database")
-		} else {
-			log.Fatal("mongo is not implemented yet")
-		}
-	} else {
-		log.Fatal("Cannot find any database implementation available")
-	}
+	accountDb = account.New(db)
+	bootstrapDb = bootstrap.New(db)
+	fileItemDb = fileitem.New(db)
+	issueDb = issue.New(db)
+	permissionDb = permission.New(db)
+	priorityDb = priority.New(db)
+	projectDb = project.New(db)
+	sessionDb = session.New(db)
+	statusDb = status.New(db)
+	userDb = user.New(db)
 
-	//	app.Setup.Db = &database.DbOperations{}
-	//ops := app.Setup.Db
-	ops := &database.DbOperations{}
+	app.Db = &database.DbOperations{}
+	ops := app.Db
 	ops.Db = db
 	app.Db = ops
-	app.Setup.Db = ops
 
 	ops.AccountDb = accountDb
 	ops.BootstrapDb = bootstrapDb
@@ -138,6 +119,7 @@ func ParseConfiguration(fileName string) (app *Application) {
 	ops.UserDb.SetAccountDb(&accountDb)
 
 	//register all database objects
+	log.Println("registering all the tables in gorp")
 	db.Register()
 
 	return
