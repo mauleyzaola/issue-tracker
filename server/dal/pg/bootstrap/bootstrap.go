@@ -109,9 +109,9 @@ func (db *BootstrapDb) BootstrapAll(tx interface{}, conn *setup.ConfigurationDat
 	return db.ResetApplicationPath(chdir)
 }
 
-func (db *BootstrapDb) BootstrapAdminUser(tx interface{}) (bool, *domain.User, error) {
+func (t *BootstrapDb) BootstrapAdminUser(tx interface{}) (bool, *domain.User, error) {
 	var users []domain.User
-	_, err := db.Base.Executor(tx).Select(&users, "select * from users where issystemadministrator=$1 and isactive=$1", true)
+	_, err := t.Base.Executor(tx).Select(&users, "select * from users where issystemadministrator=$1 and isactive=$1", true)
 	if err != nil && err != sql.ErrNoRows {
 		return false, nil, err
 	}
@@ -127,7 +127,7 @@ func (db *BootstrapDb) BootstrapAdminUser(tx interface{}) (bool, *domain.User, e
 	admin.Name = "System"
 	admin.LastName = "Administrator"
 	admin.Password = "admin"
-	err = db.UserDb().Create(tx, admin)
+	err = t.UserDb().Create(tx, admin)
 
 	return false, admin, nil
 }

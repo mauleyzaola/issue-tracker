@@ -2,7 +2,6 @@
 
 Full tracking system written in Go/HTML
 
-[![Build Status](https://drone.io/github.com/mauleyzaola/issue-tracker/status.png)](https://drone.io/github.com/mauleyzaola/issue-tracker/latest)
 
 ###Introduction
 I have been working with [Jira](https://www.atlassian.com/software/jira) for years. In spite how much I like Jira, I find it a bit complex to both ease of use and ability to integrate with other programs.
