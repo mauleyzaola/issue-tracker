@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/go-gorp/gorp"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/account"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/bootstrap"
@@ -18,11 +19,11 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/status"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/user"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/issue-tracker/server/operations/setup"
+	"github.com/mauleyzaola/tecweb/setup"
 )
 
 type Application struct {
-	Setup *setup.Application
+	Setup *setup.Setup
 	Db    *database.DbOperations
 }
 
@@ -34,7 +35,7 @@ func ParseConfiguration(fileName, rootDir string) (app *Application) {
 	}
 
 	app = &Application{}
-	app.Setup = &setup.Application{}
+	app.Setup = &setup.Setup{}
 	if err = json.Unmarshal(data, app.Setup); err != nil {
 		log.Fatal("cannot parse config.json: ", err.Error())
 	}
@@ -46,7 +47,7 @@ func ParseConfiguration(fileName, rootDir string) (app *Application) {
 
 	app.Setup.RootChDir = rootDir
 
-	err = app.initDb()
+	err = app.Setup.InitDb()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -63,7 +64,11 @@ func ParseConfiguration(fileName, rootDir string) (app *Application) {
 	var statusDb database.Status
 	var userDb database.User
 
-	db = pg.New(app.Setup.Relational)
+	dbmap, ok := app.Setup.Relational.(*gorp.DbMap)
+	if !ok {
+		log.Fatal("cannot cast to *dbmap")
+	}
+	db = pg.New(dbmap)
 
 	accountDb = account.New(db)
 	bootstrapDb = bootstrap.New(db)

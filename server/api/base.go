@@ -8,13 +8,13 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/issue-tracker/server/operations/setup"
+	"github.com/mauleyzaola/tecweb/setup"
 	"github.com/zenazn/goji/web"
 )
 
 type ApiBase struct {
 	Database *database.DbOperations
-	Setup    *setup.Application
+	Setup    *setup.Setup
 }
 
 type HttpMessage struct {
@@ -22,7 +22,7 @@ type HttpMessage struct {
 	Message    string
 }
 
-func New(db *database.DbOperations, setup *setup.Application) *ApiBase {
+func New(db *database.DbOperations, setup *setup.Setup) *ApiBase {
 	return &ApiBase{Database: db, Setup: setup}
 }
 

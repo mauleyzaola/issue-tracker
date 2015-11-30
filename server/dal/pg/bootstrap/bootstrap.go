@@ -11,7 +11,7 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/issue-tracker/server/operations/setup"
+	"github.com/mauleyzaola/tecweb/setup"
 	"github.com/rubenv/sql-migrate"
 )
 
