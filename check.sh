@@ -20,6 +20,18 @@ upgrading test database objects to latest version...
 psql -c 'drop database if exists tracker_test;'
 psql -c 'create database tracker_test;'
 
+if [ ! -f migrations/dbconfig.yml ]; then
+	cp migrations/dbconfig.yml.sample migrations/dbconfig.yml
+fi	
+
+if [ ! -f test/config.json ]; then
+	cp test/config.json.sample test/config.json
+fi	
+
+if [ ! -f server/config.json ]; then
+	cp server/config.json.sample server/config.json
+fi	
+
 echo "
 
 testing all the packages...
