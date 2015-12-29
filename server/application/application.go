@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/go-gorp/gorp"
+	"github.com/mauleyzaola/gorp"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/account"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/bootstrap"

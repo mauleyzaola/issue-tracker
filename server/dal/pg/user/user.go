@@ -42,6 +42,7 @@ func (t *UserDb) Create(tx interface{}, item *domain.User) error {
 
 	item.Password = tecutils.Encrypt(item.Password)
 	item.DateCreated = time.Now()
+
 	err = t.Base.Executor(tx).Insert(item)
 	if err != nil {
 		return err
@@ -49,6 +50,7 @@ func (t *UserDb) Create(tx interface{}, item *domain.User) error {
 
 	meta := &domain.UserMeta{IdUser: item.Id}
 	meta.Initialize()
+
 	err = t.Base.Executor(tx).Insert(meta)
 	if err != nil {
 		return err

@@ -83,25 +83,21 @@ func (db *BootstrapDb) BootstrapAll(tx interface{}, conn *setup.ConfigurationDat
 	}
 
 	//create default user if it doesn't exist
-	_, _, err = db.BootstrapAdminUser(tx)
-	if err != nil {
+	if _, _, err = db.BootstrapAdminUser(tx); err != nil {
 		return err
 	}
 
 	//add missing permission names
-	err = db.CreatePermissionNames(tx)
-	if err != nil {
+	if err = db.CreatePermissionNames(tx); err != nil {
 		return err
 	}
 
 	//create default workflows
-	err = db.BootstrapWorkflows(tx)
-	if err != nil {
+	if err = db.BootstrapWorkflows(tx); err != nil {
 		return err
 	}
 
-	err = db.BootstrapPriorities(tx)
-	if err != nil {
+	if err = db.BootstrapPriorities(tx); err != nil {
 		return err
 	}
 
@@ -112,7 +108,7 @@ func (db *BootstrapDb) BootstrapAll(tx interface{}, conn *setup.ConfigurationDat
 func (t *BootstrapDb) BootstrapAdminUser(tx interface{}) (bool, *domain.User, error) {
 	var users []domain.User
 	_, err := t.Base.Executor(tx).Select(&users, "select * from users where issystemadministrator=$1 and isactive=$1", true)
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil {
 		return false, nil, err
 	}
 	if len(users) != 0 {
@@ -129,7 +125,7 @@ func (t *BootstrapDb) BootstrapAdminUser(tx interface{}) (bool, *domain.User, er
 	admin.Password = "admin"
 	err = t.UserDb().Create(tx, admin)
 
-	return false, admin, nil
+	return false, admin, err
 }
 
 func (db *BootstrapDb) ResetApplicationPath(chdir string) error {

@@ -11,14 +11,24 @@ import (
 func TestBootstrapSequence(t *testing.T) {
 	test.Runner(func(app *application.Application, tx interface{}) {
 		_, user, err := app.Db.BootstrapDb.BootstrapAdminUser(tx)
-		assert.Nil(t, err)
+		if !assert.Nil(t, err) {
+			t.Log(err)
+			return
+		}
+
 		assert.NotNil(t, user)
 		t.Log(user.Email)
 
 		err = app.Db.BootstrapDb.CreatePermissionNames(tx)
-		assert.Nil(t, err)
+		if !assert.Nil(t, err) {
+			t.Log(err)
+			return
+		}
 		names, err := app.Db.PermissionDb.Names(tx)
-		assert.Nil(t, err)
+		if !assert.Nil(t, err) {
+			t.Log(err)
+			return
+		}
 		assert.NotNil(t, names)
 		assert.Equal(t, true, len(names) != 0)
 	})
