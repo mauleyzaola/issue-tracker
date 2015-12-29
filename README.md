@@ -41,7 +41,7 @@ You will need [Postgres](http://www.postgresql.org/download/) installed and chan
 Run these commands to copy the sample configuration files to real ones:
 ```
 cd $GOPATH/src/github.com/mauleyzaola/issue-tracker
-cp dbmigrations/pg/db/dbconf.yml.sample dbmigrations/pg/db/dbconf.yml
+cp migrations/dbconfig.yml.sample migrations/dbconfig.yml
 cp server/config.json.sample server/config.json
 cp test/config.json.sample test/config.json
 ```
