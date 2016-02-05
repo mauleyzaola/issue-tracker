@@ -12,6 +12,10 @@
     "underscore": "1.8.3",
     "angular-sanitize": "1.4.1",
     "jquery.gritter": "1.7.4",
-    "components-font-awesome": "^4.5.0"
+    "components-font-awesome": "^4.5.0",
+    "bootswatch": "3.3.6"
+  },
+  "resolutions": {
+    "bootstrap": "3.3.5"
   }
 }
