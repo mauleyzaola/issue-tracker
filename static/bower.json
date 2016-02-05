@@ -11,6 +11,7 @@
     "moment": "2.10.3",
     "underscore": "1.8.3",
     "angular-sanitize": "1.4.1",
-    "jquery.gritter": "1.7.4"
+    "jquery.gritter": "1.7.4",
+    "components-font-awesome": "^4.5.0"
   }
 }
