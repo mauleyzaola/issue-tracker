@@ -1,9 +1,9 @@
-#Issue-Tracker
+# Issue-Tracker
 
 Full tracking system written in Go/HTML
 
 
-###Introduction
+### Introduction
 I have been working with [Jira](https://www.atlassian.com/software/jira) for years. In spite how much I like Jira, I find it a bit complex to both ease of use and ability to integrate with other programs.
 
 Lately I've had to develop separately different versions of the issue-tracker for another projects, and thought it would make sense to have one unified open-source version of it. And this is the reason I decided to create this project.
@@ -18,13 +18,13 @@ I wish more people to contribute to the project to make it more robust, incorpor
 
 Below are some sample screens and the instructions to configure the application at the bottom.
 
-####Dashboard
+#### Dashboard
 ![demo1](https://cloud.githubusercontent.com/assets/1648558/9989053/161dbc80-601b-11e5-81a2-b7e3dd063932.png)
 
-####Projects
+#### Projects
 ![demo2](https://cloud.githubusercontent.com/assets/1648558/9989111/83dc6956-601b-11e5-9ffe-c10fd0de6748.png)
 
-####Issues
+#### Issues
 ![demo3](https://cloud.githubusercontent.com/assets/1648558/9989133/a4314b7c-601b-11e5-80f7-7c84d37794c4.png)
 
 ### Installation
