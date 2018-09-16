@@ -7,7 +7,7 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/application"
 	"github.com/mauleyzaola/issue-tracker/test"
 	"github.com/mauleyzaola/issue-tracker/test/mock"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 	"github.com/stretchr/testify/assert"
 )
 

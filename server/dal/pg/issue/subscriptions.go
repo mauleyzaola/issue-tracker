@@ -7,7 +7,7 @@ import (
 
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 )
 
 func (t *IssueDb) Subscribers(tx interface{}, issue *domain.Issue, excludeCurrentUser bool) (items []domain.User, err error) {

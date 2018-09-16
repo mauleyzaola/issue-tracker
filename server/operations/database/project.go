@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/mauleyzaola/issue-tracker/server/domain"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 )
 
 type Project interface {

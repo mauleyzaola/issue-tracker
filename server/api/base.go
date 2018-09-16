@@ -8,7 +8,7 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/tecweb/setup"
+	"github.com/mauleyzaola/issue-tracker/utils/tecweb/setup"
 	"github.com/zenazn/goji/web"
 )
 

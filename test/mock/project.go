@@ -5,7 +5,7 @@ import (
 
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/tecutils"
+	"github.com/mauleyzaola/issue-tracker/utils/tecutils"
 )
 
 func Project(sequence int) *domain.Project {

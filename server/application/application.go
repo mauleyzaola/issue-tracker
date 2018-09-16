@@ -19,7 +19,7 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/status"
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg/user"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/tecweb/setup"
+	"github.com/mauleyzaola/issue-tracker/utils/tecweb/setup"
 )
 
 type Application struct {

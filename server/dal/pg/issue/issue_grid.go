@@ -6,7 +6,7 @@ import (
 
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 )
 
 func (t *IssueDb) Grid(tx interface{}, grid *tecgrid.NgGrid, filter *database.IssueFilter) error {
