@@ -8,7 +8,7 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/application"
 	"github.com/mauleyzaola/issue-tracker/test"
 	"github.com/mauleyzaola/issue-tracker/test/mock"
-	"github.com/mauleyzaola/tecutils"
+	"github.com/mauleyzaola/issue-tracker/utils/tecutils"
 	"github.com/stretchr/testify/assert"
 )
 

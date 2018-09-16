@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/mauleyzaola/issue-tracker/server/domain"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 )
 
 func (t *UserDb) RoleCreate(tx interface{}, item *domain.Role) error {

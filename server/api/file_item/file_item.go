@@ -11,8 +11,8 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/tecgrid"
-	"github.com/mauleyzaola/tecutils"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecutils"
 	"github.com/zenazn/goji/web"
 )
 

@@ -6,7 +6,7 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/dal/pg"
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/server/operations/database"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 )
 
 type PermissionDb struct {

@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/mauleyzaola/issue-tracker/server/domain"
-	"github.com/mauleyzaola/tecweb/setup"
+	"github.com/mauleyzaola/issue-tracker/utils/tecweb/setup"
 )
 
 type Bootstrap interface {

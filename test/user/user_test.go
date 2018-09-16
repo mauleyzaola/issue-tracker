@@ -8,8 +8,8 @@ import (
 	"github.com/mauleyzaola/issue-tracker/server/domain"
 	"github.com/mauleyzaola/issue-tracker/test"
 	"github.com/mauleyzaola/issue-tracker/test/mock"
-	"github.com/mauleyzaola/tecgrid"
-	"github.com/mauleyzaola/tecutils"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecutils"
 	"github.com/stretchr/testify/assert"
 )
 

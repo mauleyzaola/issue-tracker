@@ -1,8 +1,8 @@
 {
   "name": "issue-tracker",
-  "repository":{
-    "type":"git",
-    "url":"git@bitbucket.org:mauleyzaola/issue-tracker.git"
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:mauleyzaola/issue-tracker.git"
   },
   "version": "0.0.1",
   "dependencies": {},

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/mauleyzaola/issue-tracker/server/domain"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 )
 
 func (t *UserDb) GroupCreate(tx interface{}, item *domain.Group) (err error) {

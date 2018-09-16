@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/mauleyzaola/issue-tracker/server/domain"
-	"github.com/mauleyzaola/tecgrid"
+	"github.com/mauleyzaola/issue-tracker/utils/tecgrid"
 )
 
 //Lambda that can be passed as required when an Issue status has changed
