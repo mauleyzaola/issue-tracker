@@ -5,7 +5,7 @@ import (
 )
 
 func SendMessageMailgun(config *EmailConfig, message *EmailMessage) (id string, response string, err error) {
-	gun := mailgun.NewMailgun(config.Mailgun.Domain, config.Mailgun.PublicKey, config.Mailgun.PrivateKey)
+	gun := mailgun.NewMailgun(config.Mailgun.Domain, config.Mailgun.PublicKey)
 	if len(message.BodyHtml) != 0 {
 		message.Body = message.BodyHtml
 	}
