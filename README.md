@@ -49,7 +49,7 @@ cp test/config.json.sample test/config.json
 Start a Postgres instance
 
 ```
-docker run -d -e POSTGRES_PASSWORD=nevermind --rm --name pg postgres:12
+docker run -d -e POSTGRES_PASSWORD=nevermind -p 5432:5432 --rm --name pg postgres:12
 ```
 
 Next, create two databases in postgres; one is for running the unit tests, the other for the application.
