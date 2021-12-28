@@ -45,6 +45,13 @@ cp migrations/dbconfig.yml.sample migrations/dbconfig.yml
 cp server/config.json.sample server/config.json
 cp test/config.json.sample test/config.json
 ```
+
+Start a Postgres instance
+
+```
+docker run -d -e POSTGRES_PASSWORD=nevermind --rm --name pg postgres:12
+```
+
 Next, create two databases in postgres; one is for running the unit tests, the other for the application.
 ```
 psql -c 'create database tracker;'

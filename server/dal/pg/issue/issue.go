@@ -313,7 +313,7 @@ func (t *IssueDb) Remove(tx interface{}, id string) (*domain.Issue, error) {
 
 	children, err := t.Base.Executor(tx).SelectInt("select count(*) from issue where idparent=$1", item.Id)
 	if children != 0 {
-		return nil, fmt.Errorf("cannot remove the issue because there are %s subtasks", children)
+		return nil, fmt.Errorf("cannot remove the issue because there are %v subtasks", children)
 	}
 
 	query := "delete from issue_subscription where idissue=$1"
