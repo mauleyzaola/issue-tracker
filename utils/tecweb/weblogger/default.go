@@ -1,7 +1,7 @@
 package weblogger
 
 import (
-	"github.com/mauleyzaola/glog"
+	"github.com/golang/glog"
 )
 
 type DefaultLogger struct{}
