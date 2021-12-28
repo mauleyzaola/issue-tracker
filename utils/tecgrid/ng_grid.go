@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mauleyzaola/glog"
+	"github.com/golang/glog"
 	"github.com/mauleyzaola/gorp"
 )
 
