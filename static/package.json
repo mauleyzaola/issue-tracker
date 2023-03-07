@@ -12,9 +12,9 @@
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-cssmin": "^0.12.2",
-    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-uglify": "^5.2.2",
     "grunt-ng-annotate": "^0.10.0",
-    "grunt-processhtml": "^0.3.7",
+    "grunt-processhtml": "^0.4.3",
     "grunt-string-replace": "^1.1.1",
     "node-uuid": "^1.4.3"
   },
